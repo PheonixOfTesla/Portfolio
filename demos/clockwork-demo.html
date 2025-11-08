@@ -1244,6 +1244,7 @@ const [resetEmail, setResetEmail] = useState('');
 </div>
                         
                         {!isResetting && (
+                        <>
                         <div className="flex mb-6">
     <button
         onClick={() => setIsSignup(false)}
@@ -1258,6 +1259,30 @@ const [resetEmail, setResetEmail] = useState('');
         Sign Up
     </button>
 </div>
+
+{!isSignup && (
+<div style={{background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', border: '2px dashed #3b82f6'}}>
+    <p style={{fontSize: '0.75rem', fontWeight: '600', color: '#1e40af', marginBottom: '0.5rem', textAlign: 'center'}}>
+        🎯 Demo Login Credentials
+    </p>
+    <div style={{fontSize: '0.75rem', color: '#374151'}}>
+        <div style={{marginBottom: '0.25rem'}}>
+            <strong style={{color: '#3b82f6'}}>Email:</strong> demo@clockwork.com
+        </div>
+        <div>
+            <strong style={{color: '#3b82f6'}}>Password:</strong> demo123
+        </div>
+    </div>
+    <button
+        type="button"
+        onClick={() => setFormData({email: 'demo@clockwork.com', password: 'demo123', name: ''})}
+        style={{marginTop: '0.5rem', width: '100%', padding: '0.5rem', background: '#3b82f6', color: 'white', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: '600'}}
+    >
+        Click to Auto-Fill
+    </button>
+</div>
+)}
+</>
                     )}
                         <form onSubmit={handleSubmit}>
                           {!isResetting && isSignup && (
