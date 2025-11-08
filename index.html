@@ -1050,38 +1050,40 @@
                 <div class="project-body">
                     <p>Comprehensive fitness and wellness platform with client management, workout tracking, and specialized rehabilitation programs.</p>
 
-                    <!-- Screenshot Carousel -->
-                    <div class="screenshot-carousel">
-                        <div class="carousel-container">
-                            <button class="carousel-nav prev">‹</button>
-                            <div class="carousel-slides">
-                                <!-- Add Coastal Fitness screenshots here -->
-                                <div class="carousel-slide">
-                                    <div style="text-align: center; color: #64748b;">
-                                        <p style="font-size: 3rem;">💪</p>
-                                        <p>Add Coastal Fitness screenshots here</p>
-                                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Client Tracking • Workouts • Progress Analytics</p>
-                                    </div>
-                                </div>
-                                <div class="carousel-slide">
-                                    <div style="text-align: center; color: #64748b;">
-                                        <p style="font-size: 3rem;">📊</p>
-                                        <p>Screenshot 2</p>
-                                    </div>
-                                </div>
-                                <div class="carousel-slide">
-                                    <div style="text-align: center; color: #64748b;">
-                                        <p style="font-size: 3rem;">💬</p>
-                                        <p>Screenshot 3</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="carousel-nav next">›</button>
-                        </div>
-                        <div class="carousel-dots">
-                            <button class="carousel-dot active"></button>
-                            <button class="carousel-dot"></button>
-                            <button class="carousel-dot"></button>
+                    <!-- In-App Demo -->
+                    <div style="margin: 1.5rem 0; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+                        <iframe
+                            src="demos/coastal-fitness-demo.html"
+                            style="width: 100%; height: 600px; border: none; display: block;"
+                            title="Coastal Fitness Hub - Interactive Demo"
+                            sandbox="allow-scripts allow-same-origin allow-forms">
+                        </iframe>
+                    </div>
+
+                    <!-- Navigation Panel -->
+                    <div style="padding: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; margin-top: 1rem;">
+                        <p style="text-align: center; font-weight: 600; margin-bottom: 1rem; color: #334155;">
+                            🏋️ Explore Coastal Fitness Features
+                        </p>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                            <a href="demos/coastal-fitness-demo.html" target="_blank"
+                               style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+                                      color: white; border-radius: 8px; text-decoration: none; font-weight: 500;
+                                      transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem;
+                                      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(99, 102, 241, 0.4)';"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.3)';">
+                                💪 Open Full Demo
+                            </a>
+                            <a href="https://coastalfitnesshub.com" target="_blank"
+                               style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                                      color: white; border-radius: 8px; text-decoration: none; font-weight: 500;
+                                      transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem;
+                                      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.4)';"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.3)';">
+                                🚀 Live Production Site
+                            </a>
                         </div>
                     </div>
 
@@ -1104,23 +1106,48 @@
     <section id="books">
         <h2 class="section-title">Published Works</h2>
         <p class="section-subtitle">Health, wellness, and nutrition science</p>
-        
+
         <div class="books-grid">
             <div class="book-card">
                 <div class="book-icon">📖</div>
                 <h3>The Gift of Food</h3>
                 <p>Transform your health by harnessing the power of nutrition and well-being. A comprehensive guide to understanding how food impacts every aspect of life.</p>
-                <a href="https://www.amazon.com/Gift-Food-Transform-Harnessing-Well-being-ebook/dp/B0CM8YRDCX" class="btn btn-primary" target="_blank">View on Amazon</a>
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                    <button onclick="openPurchaseModal('gift-of-food')" class="btn btn-primary" style="cursor: pointer; border: none; font-family: inherit; font-size: inherit;">
+                        💳 Buy Now
+                    </button>
+                    <a href="https://www.amazon.com/Gift-Food-Transform-Harnessing-Well-being-ebook/dp/B0CM8YRDCX" class="btn" style="background: linear-gradient(135deg, #FF9900 0%, #FF7700 100%);" target="_blank">
+                        📦 Amazon
+                    </a>
+                </div>
             </div>
-            
+
             <div class="book-card">
                 <div class="book-icon">🌿</div>
                 <h3>Cracking Open Nature's Medicine Cabinet</h3>
                 <p>Discover the healing power of natural remedies and time-tested approaches to health and wellness from nature's pharmacy.</p>
-                <a href="https://www.amazon.com/Cracking-Open-Natures-Medicine-Cabinet-ebook/dp/B0CLKYDDL5" class="btn btn-primary" target="_blank">View on Amazon</a>
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                    <button onclick="openPurchaseModal('medicine-cabinet')" class="btn btn-primary" style="cursor: pointer; border: none; font-family: inherit; font-size: inherit;">
+                        💳 Buy Now
+                    </button>
+                    <a href="https://www.amazon.com/Cracking-Open-Natures-Medicine-Cabinet-ebook/dp/B0CLKYDDL5" class="btn" style="background: linear-gradient(135deg, #FF9900 0%, #FF7700 100%);" target="_blank">
+                        📦 Amazon
+                    </a>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- Purchase Modal -->
+    <div id="purchaseModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;" onclick="closePurchaseModal()">
+        <div style="background: white; border-radius: 16px; max-width: 500px; width: 90%; padding: 2rem; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" onclick="event.stopPropagation()">
+            <button onclick="closePurchaseModal()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s ease;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">×</button>
+
+            <div id="modalContent">
+                <!-- Content will be inserted by JavaScript -->
+            </div>
+        </div>
+    </div>
 
     <!-- Skills Section -->
     <section id="skills">
@@ -1279,6 +1306,115 @@
         document.addEventListener('DOMContentLoaded', () => {
             const carousels = document.querySelectorAll('.screenshot-carousel');
             carousels.forEach(carousel => new Carousel(carousel));
+        });
+
+        // Book Purchase Modal Functions
+        const bookData = {
+            'gift-of-food': {
+                title: 'The Gift of Food',
+                icon: '📖',
+                price: '$9.99',
+                description: 'Transform your health by harnessing the power of nutrition and well-being.',
+                formats: {
+                    ebook: '$9.99',
+                    paperback: '$14.99',
+                    hardcover: '$24.99'
+                },
+                amazonUrl: 'https://www.amazon.com/Gift-Food-Transform-Harnessing-Well-being-ebook/dp/B0CM8YRDCX',
+                stripeUrl: '#' // Replace with actual Stripe payment link
+            },
+            'medicine-cabinet': {
+                title: 'Cracking Open Nature\'s Medicine Cabinet',
+                icon: '🌿',
+                price: '$9.99',
+                description: 'Discover the healing power of natural remedies and time-tested approaches to health.',
+                formats: {
+                    ebook: '$9.99',
+                    paperback: '$14.99',
+                    hardcover: '$24.99'
+                },
+                amazonUrl: 'https://www.amazon.com/Cracking-Open-Natures-Medicine-Cabinet-ebook/dp/B0CLKYDDL5',
+                stripeUrl: '#' // Replace with actual Stripe payment link
+            }
+        };
+
+        function openPurchaseModal(bookId) {
+            const book = bookData[bookId];
+            const modal = document.getElementById('purchaseModal');
+            const modalContent = document.getElementById('modalContent');
+
+            modalContent.innerHTML = `
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">${book.icon}</div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: #1e293b;">${book.title}</h2>
+                    <p style="color: #64748b; margin-bottom: 1rem;">${book.description}</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                    <h3 style="font-size: 1rem; margin-bottom: 1rem; color: #334155; text-align: center;">Choose Your Format</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        ${Object.entries(book.formats).map(([format, price]) => `
+                            <button onclick="purchaseBook('${bookId}', '${format}')"
+                                    style="padding: 1rem; background: white; border: 2px solid #e2e8f0; border-radius: 8px;
+                                           cursor: pointer; transition: all 0.2s ease; font-size: 1rem; font-weight: 500;
+                                           display: flex; justify-content: space-between; align-items: center;"
+                                    onmouseover="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 4px 12px rgba(0,217,255,0.2)';"
+                                    onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                                <span style="text-transform: capitalize; color: #1e293b;">${format}</span>
+                                <span style="color: var(--primary); font-weight: 600;">${price}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 1rem;">
+                        Or purchase from these retailers:
+                    </p>
+                    <a href="${book.amazonUrl}" target="_blank"
+                       style="display: inline-block; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #FF9900 0%, #FF7700 100%);
+                              color: white; border-radius: 8px; text-decoration: none; font-weight: 500; transition: all 0.2s ease;"
+                       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(255,153,0,0.3)';"
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                        📦 View on Amazon
+                    </a>
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePurchaseModal() {
+            const modal = document.getElementById('purchaseModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function purchaseBook(bookId, format) {
+            const book = bookData[bookId];
+
+            // For now, redirect to Amazon with the specific format
+            // In production, this would trigger Stripe Checkout or Gumroad
+            if (book.stripeUrl && book.stripeUrl !== '#') {
+                // If Stripe is configured, use it
+                window.open(book.stripeUrl, '_blank');
+            } else {
+                // Fall back to Amazon
+                window.open(book.amazonUrl, '_blank');
+            }
+
+            closePurchaseModal();
+
+            // Optional: Track purchase intent
+            console.log(`Purchase intent: ${book.title} - ${format}`);
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePurchaseModal();
+            }
         });
     </script>
 </body>
