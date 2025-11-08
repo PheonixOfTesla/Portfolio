@@ -656,6 +656,101 @@
             padding: 2rem;
         }
 
+        /* Screenshot Carousel */
+        .screenshot-carousel {
+            position: relative;
+            width: 100%;
+            margin: 1.5rem 0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8fafc;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .carousel-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 0;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            padding: 0;
+        }
+
+        .carousel-dot.active {
+            background: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+            width: 12px;
+            height: 12px;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .carousel-nav.prev {
+            left: 10px;
+        }
+
+        .carousel-nav.next {
+            right: 10px;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero-content {
@@ -765,16 +860,32 @@
                 <div class="project-header">
                     <div class="project-icon">🔥</div>
                     <h3>Phoenix AI</h3>
-                    <p class="tech-stack">JavaScript • Three.js • Node.js • MongoDB • Gemini AI</p>
+                    <p class="tech-stack">Advanced AI • 3D Visualization • Cloud Infrastructure</p>
                 </div>
                 <div class="project-body">
-                    <p>Iron Man-inspired AI life operating system managing health, fitness, goals, and finances through 7 planetary systems with ChatGPT-level conversational intelligence.</p>
+                    <p>Iron Man-inspired AI life operating system managing health, fitness, goals, and finances through 7 planetary systems with intelligent conversational interface.</p>
+
+                    <!-- Video Demo -->
+                    <div class="video-demo" style="margin: 1.5rem 0; border-radius: 8px; overflow: hidden;">
+                        <iframe
+                            width="100%"
+                            height="400"
+                            src="https://www.youtube.com/embed/xs3KWv1o2ZU"
+                            title="Phoenix AI Demo"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            style="border-radius: 8px;">
+                        </iframe>
+                        <p style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray);">Phoenix AI voice interaction demo</p>
+                    </div>
+
                     <ul class="project-features">
                         <li>Voice AI with wake word detection in 8 languages</li>
-                        <li>Real-time biometric monitoring from 5 wearables</li>
-                        <li>3D holographic visualization with WebGL</li>
-                        <li>307 API endpoints with Railway backend</li>
-                        <li>1-2 second AI response times</li>
+                        <li>Real-time biometric monitoring from multiple wearables</li>
+                        <li>3D holographic planetary visualization</li>
+                        <li>Comprehensive API with cloud-based backend</li>
+                        <li>Sub-2-second AI response times</li>
                     </ul>
                     <div class="project-links">
                         <a href="https://pheonixoftesla.github.io/phoenix-fe/" class="project-link" target="_blank">Live Demo</a>
@@ -788,16 +899,52 @@
                 <div class="project-header">
                     <div class="project-icon">⚙️</div>
                     <h3>ClockWork Hub</h3>
-                    <p class="tech-stack">React • Express • MongoDB • Socket.io • Stripe</p>
+                    <p class="tech-stack">Full-Stack Web Application • Real-Time Communication • Payment Integration</p>
                 </div>
                 <div class="project-body">
                     <p>Universal business platform offering enterprise-level client management for a one-time payment instead of expensive monthly SaaS subscriptions.</p>
+
+                    <!-- Screenshot Carousel -->
+                    <div class="screenshot-carousel">
+                        <div class="carousel-container">
+                            <button class="carousel-nav prev">‹</button>
+                            <div class="carousel-slides">
+                                <!-- Add your screenshots here -->
+                                <div class="carousel-slide">
+                                    <div style="text-align: center; color: #64748b;">
+                                        <p style="font-size: 3rem;">⚙️</p>
+                                        <p>Add ClockWork screenshots here</p>
+                                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Dashboard • Client Management • Chat Interface</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div style="text-align: center; color: #64748b;">
+                                        <p style="font-size: 3rem;">💼</p>
+                                        <p>Screenshot 2</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div style="text-align: center; color: #64748b;">
+                                        <p style="font-size: 3rem;">📊</p>
+                                        <p>Screenshot 3</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-nav next">›</button>
+                        </div>
+                        <div class="carousel-dots">
+                            <button class="carousel-dot active"></button>
+                            <button class="carousel-dot"></button>
+                            <button class="carousel-dot"></button>
+                        </div>
+                    </div>
+
                     <ul class="project-features">
-                        <li>Unlimited users with multi-role system</li>
-                        <li>Real-time chat with Zoom integration</li>
+                        <li>Unlimited users with multi-role permission system</li>
+                        <li>Real-time chat and video conferencing</li>
                         <li>Adapts to any service-based industry</li>
-                        <li>Custom branding and data export</li>
-                        <li>Works offline with progressive web app</li>
+                        <li>Custom branding and complete data export</li>
+                        <li>Offline-capable progressive web app</li>
                     </ul>
                     <div class="project-links">
                         <a href="https://theclockworkhub.com" class="project-link" target="_blank">View Site</a>
@@ -810,16 +957,52 @@
                 <div class="project-header">
                     <div class="project-icon">⚡</div>
                     <h3>Lightning Pass</h3>
-                    <p class="tech-stack">Node.js • MongoDB • Stripe • Twilio • Capacitor</p>
+                    <p class="tech-stack">Cloud Infrastructure • Payment Processing • Mobile Platform</p>
                 </div>
                 <div class="project-body">
                     <p>Event ticketing and venue management platform with seamless payment processing and real-time attendance tracking.</p>
+
+                    <!-- Screenshot Carousel -->
+                    <div class="screenshot-carousel">
+                        <div class="carousel-container">
+                            <button class="carousel-nav prev">‹</button>
+                            <div class="carousel-slides">
+                                <!-- Add your screenshots here -->
+                                <div class="carousel-slide">
+                                    <div style="text-align: center; color: #64748b;">
+                                        <p style="font-size: 3rem;">⚡</p>
+                                        <p>Add Lightning Pass screenshots here</p>
+                                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Ticketing • QR Codes • Event Management</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div style="text-align: center; color: #64748b;">
+                                        <p style="font-size: 3rem;">🎫</p>
+                                        <p>Screenshot 2</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div style="text-align: center; color: #64748b;">
+                                        <p style="font-size: 3rem;">📱</p>
+                                        <p>Screenshot 3</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-nav next">›</button>
+                        </div>
+                        <div class="carousel-dots">
+                            <button class="carousel-dot active"></button>
+                            <button class="carousel-dot"></button>
+                            <button class="carousel-dot"></button>
+                        </div>
+                    </div>
+
                     <ul class="project-features">
-                        <li>Stripe integration for instant payments</li>
+                        <li>Instant payment processing and secure checkout</li>
                         <li>QR code ticket generation and validation</li>
-                        <li>Twilio SMS notifications</li>
-                        <li>Real-time queue management</li>
-                        <li>Mobile-first design with Capacitor</li>
+                        <li>Automated SMS notifications and reminders</li>
+                        <li>Real-time queue and capacity management</li>
+                        <li>Cross-platform mobile-first design</li>
                     </ul>
                     <div class="project-links">
                         <a href="https://lightning-app-peach.vercel.app" class="project-link" target="_blank">Live Demo</a>
@@ -833,16 +1016,52 @@
                 <div class="project-header">
                     <div class="project-icon">💪</div>
                     <h3>Coastal Fitness Hub</h3>
-                    <p class="tech-stack">React • Express • MongoDB • Cloudinary • JWT</p>
+                    <p class="tech-stack">Full-Stack Platform • Cloud Storage • Secure Authentication</p>
                 </div>
                 <div class="project-body">
                     <p>Comprehensive fitness and wellness platform with client management, workout tracking, and specialized rehabilitation programs.</p>
+
+                    <!-- Screenshot Carousel -->
+                    <div class="screenshot-carousel">
+                        <div class="carousel-container">
+                            <button class="carousel-nav prev">‹</button>
+                            <div class="carousel-slides">
+                                <!-- Add your screenshots here -->
+                                <div class="carousel-slide">
+                                    <div style="text-align: center; color: #64748b;">
+                                        <p style="font-size: 3rem;">💪</p>
+                                        <p>Add Coastal Fitness screenshots here</p>
+                                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Client Tracking • Workouts • Progress Analytics</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div style="text-align: center; color: #64748b;">
+                                        <p style="font-size: 3rem;">📊</p>
+                                        <p>Screenshot 2</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <div style="text-align: center; color: #64748b;">
+                                        <p style="font-size: 3rem;">💬</p>
+                                        <p>Screenshot 3</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-nav next">›</button>
+                        </div>
+                        <div class="carousel-dots">
+                            <button class="carousel-dot active"></button>
+                            <button class="carousel-dot"></button>
+                            <button class="carousel-dot"></button>
+                        </div>
+                    </div>
+
                     <ul class="project-features">
-                        <li>Client progress tracking and analytics</li>
-                        <li>Workout program builder</li>
-                        <li>Real-time messaging system</li>
-                        <li>Image upload with Cloudinary</li>
-                        <li>Secure authentication with JWT</li>
+                        <li>Advanced progress tracking and analytics</li>
+                        <li>Intelligent workout program builder</li>
+                        <li>Real-time messaging and notifications</li>
+                        <li>Cloud-based media storage and sharing</li>
+                        <li>Enterprise-grade secure authentication</li>
                     </ul>
                     <div class="project-links">
                         <a href="https://coastalfitnesshub.com" class="project-link" target="_blank">View Site</a>
@@ -959,5 +1178,79 @@
         <p>&copy; 2025 Josh Lerner. Built with passion in Sarasota, Florida.</p>
         <p style="margin-top: 0.5rem; opacity: 0.7;">Full-Stack Software Engineer | AI Innovator | Published Author</p>
     </footer>
+
+    <script>
+        // Screenshot Carousel Functionality
+        class Carousel {
+            constructor(element) {
+                this.carousel = element;
+                this.slides = this.carousel.querySelector('.carousel-slides');
+                this.dots = this.carousel.querySelectorAll('.carousel-dot');
+                this.prevBtn = this.carousel.querySelector('.carousel-nav.prev');
+                this.nextBtn = this.carousel.querySelector('.carousel-nav.next');
+                this.currentIndex = 0;
+                this.totalSlides = this.dots.length;
+                this.autoPlayInterval = null;
+
+                this.init();
+            }
+
+            init() {
+                // Add event listeners
+                this.prevBtn?.addEventListener('click', () => this.prev());
+                this.nextBtn?.addEventListener('click', () => this.next());
+
+                this.dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => this.goToSlide(index));
+                });
+
+                // Start autoplay
+                this.startAutoPlay();
+
+                // Pause on hover
+                this.carousel.addEventListener('mouseenter', () => this.stopAutoPlay());
+                this.carousel.addEventListener('mouseleave', () => this.startAutoPlay());
+            }
+
+            goToSlide(index) {
+                this.currentIndex = index;
+                this.updateCarousel();
+            }
+
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.totalSlides;
+                this.updateCarousel();
+            }
+
+            prev() {
+                this.currentIndex = (this.currentIndex - 1 + this.totalSlides) % this.totalSlides;
+                this.updateCarousel();
+            }
+
+            updateCarousel() {
+                // Move slides
+                this.slides.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+
+                // Update dots
+                this.dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentIndex);
+                });
+            }
+
+            startAutoPlay() {
+                this.autoPlayInterval = setInterval(() => this.next(), 4000);
+            }
+
+            stopAutoPlay() {
+                clearInterval(this.autoPlayInterval);
+            }
+        }
+
+        // Initialize all carousels when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousels = document.querySelectorAll('.screenshot-carousel');
+            carousels.forEach(carousel => new Carousel(carousel));
+        });
+    </script>
 </body>
 </html>
