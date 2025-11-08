@@ -1,0 +1,30 @@
+# robots.txt for joshlerner.dev
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://joshlerner.dev/sitemap.xml
+
+# Crawl delay (optional - helps with server load)
+Crawl-delay: 10
+
+# Block access to any future admin areas (if needed)
+Disallow: /admin/
+Disallow: /private/
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
