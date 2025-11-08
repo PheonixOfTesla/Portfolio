@@ -1,0 +1,3422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Lightning Pass - Complete Platform</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+    <!-- Premium Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Stripe.js for payment processing -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <!-- QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pure-black: #000000;
+            --card-black: #111111;
+            --border-dark: #1a1a1a;
+            --lightning-yellow: #ffdd00;
+            --electric-blue: #00d4ff;
+            --electric-purple: #9d4edd;
+            --neon-green: #39ff14;
+            --danger-red: #ff0044;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--pure-black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 221, 0, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(157, 78, 221, 0.03) 0%, transparent 50%);
+            animation: pulseGlow 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        nav.auth-hidden {
+            display: none;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo span:first-child {
+            font-size: 2rem;
+            animation: electricPulse 2s infinite;
+        }
+
+        @keyframes electricPulse {
+            0%, 100% { color: var(--lightning-yellow); }
+            50% { color: var(--electric-purple); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link:hover {
+            color: var(--lightning-yellow);
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            border: 1px solid;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+            background: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.875rem;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            border-color: var(--electric-blue);
+            color: var(--electric-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0);
+        }
+
+        .btn-primary:hover {
+            background: var(--electric-blue);
+            color: var(--pure-black);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow:
+                0 0 20px rgba(0, 212, 255, 0.4),
+                0 0 40px rgba(0, 212, 255, 0.2),
+                0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-success {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0);
+        }
+
+        .btn-success:hover {
+            background: var(--neon-green);
+            color: var(--pure-black);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow:
+                0 0 20px rgba(57, 255, 20, 0.4),
+                0 0 40px rgba(57, 255, 20, 0.2),
+                0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-danger {
+            border-color: var(--danger-red);
+            color: var(--danger-red);
+            box-shadow: 0 0 20px rgba(255, 0, 68, 0);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger-red);
+            color: var(--white);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow:
+                0 0 20px rgba(255, 0, 68, 0.4),
+                0 0 40px rgba(255, 0, 68, 0.2),
+                0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            border-color: var(--lightning-yellow);
+            color: var(--lightning-yellow);
+            box-shadow: 0 0 20px rgba(255, 221, 0, 0);
+        }
+
+        .btn-secondary:hover {
+            background: var(--lightning-yellow);
+            color: var(--pure-black);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow:
+                0 0 20px rgba(255, 221, 0, 0.4),
+                0 0 40px rgba(255, 221, 0, 0.2),
+                0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn:disabled:hover {
+            box-shadow: none !important;
+        }
+
+        main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(157, 78, 221, 0.1) 0%, transparent 70%);
+            border: 1px solid var(--border-dark);
+            border-radius: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--lightning-yellow), var(--electric-purple), var(--electric-blue));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s linear infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* Premium Lightning Effect with SVG */
+        .lightning-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .lightning-svg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        .lightning-path {
+            stroke: url(#lightning-gradient);
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: url(#lightning-glow);
+        }
+
+        .lightning-branch {
+            stroke: url(#lightning-gradient);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            opacity: 0.7;
+            filter: url(#lightning-glow);
+        }
+
+        .lightning-svg:nth-child(1) {
+            animation: realistic-lightning 6s ease-in-out infinite;
+            animation-delay: 0s;
+        }
+
+        .lightning-svg:nth-child(2) {
+            animation: realistic-lightning 6s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        .lightning-svg:nth-child(3) {
+            animation: realistic-lightning 6s ease-in-out infinite;
+            animation-delay: 4s;
+        }
+
+        @keyframes realistic-lightning {
+            0%, 8%, 100% {
+                opacity: 0;
+            }
+            8.5% {
+                opacity: 1;
+            }
+            8.8% {
+                opacity: 0.3;
+            }
+            9% {
+                opacity: 1;
+            }
+            9.3% {
+                opacity: 0;
+            }
+        }
+
+        /* Premium Flash Effect */
+        .lightning-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 221, 0, 0.2) 30%,
+                rgba(0, 212, 255, 0.1) 50%,
+                transparent 70%
+            );
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes dramatic-flash {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            20% { opacity: 0; }
+            25% { opacity: 0.8; }
+            30% { opacity: 0; }
+        }
+
+        .lightning-flash.active {
+            animation: dramatic-flash 0.3s ease-out;
+        }
+
+        /* Particle System */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Ambient Light Rays */
+        .ambient-lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .light-ray {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                rgba(255, 221, 0, 0.05) 20%,
+                rgba(0, 212, 255, 0.05) 50%,
+                rgba(157, 78, 221, 0.05) 80%,
+                transparent 100%
+            );
+            transform-origin: top center;
+            animation: rotate-ray 20s linear infinite;
+            filter: blur(2px);
+        }
+
+        .light-ray:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .light-ray:nth-child(2) {
+            left: 30%;
+            animation-delay: -5s;
+        }
+
+        .light-ray:nth-child(3) {
+            left: 50%;
+            animation-delay: -10s;
+        }
+
+        .light-ray:nth-child(4) {
+            left: 70%;
+            animation-delay: -15s;
+        }
+
+        .light-ray:nth-child(5) {
+            left: 90%;
+            animation-delay: -8s;
+        }
+
+        @keyframes rotate-ray {
+            0% { transform: rotate(-5deg); opacity: 0.3; }
+            50% { transform: rotate(5deg); opacity: 0.6; }
+            100% { transform: rotate(-5deg); opacity: 0.3; }
+        }
+
+        /* Circuit Grid Overlay */
+        .circuit-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image:
+                linear-gradient(rgba(157, 78, 221, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(157, 78, 221, 0.5) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes grid-pulse {
+            0%, 100% { opacity: 0.02; }
+            50% { opacity: 0.06; }
+        }
+
+        .section {
+            background: rgba(17, 17, 17, 0.8);
+            backdrop-filter: blur(50px) saturate(180%);
+            -webkit-backdrop-filter: blur(50px) saturate(180%);
+            border: 1px solid rgba(157, 78, 221, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            box-shadow:
+                0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+                0 0 0 1px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg,
+                rgba(255, 221, 0, 0.1) 0%,
+                rgba(157, 78, 221, 0.1) 50%,
+                rgba(0, 212, 255, 0.1) 100%
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .section:hover::before {
+            opacity: 1;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 12px 48px 0 rgba(157, 78, 221, 0.15),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(157, 78, 221, 0.3);
+        }
+
+        .section-title {
+            color: var(--electric-purple);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--electric-purple);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--pure-black);
+            border: 1px solid var(--border-dark);
+            border-radius: 0.5rem;
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--electric-purple);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-black);
+            border: 1px solid var(--border-dark);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, var(--lightning-yellow), var(--electric-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .venues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .venue-card {
+            background: var(--card-black);
+            border: 1px solid var(--border-dark);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .venue-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--electric-purple);
+            box-shadow: 0 10px 40px rgba(157, 78, 221, 0.3);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge-pending {
+            background: rgba(255, 221, 0, 0.2);
+            color: var(--lightning-yellow);
+            border: 1px solid var(--lightning-yellow);
+        }
+
+        .badge-approved {
+            background: rgba(57, 255, 20, 0.2);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--pure-black);
+            border: 1px solid var(--electric-purple);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 50px rgba(157, 78, 221, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, var(--lightning-yellow), var(--electric-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: var(--electric-purple);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: var(--white);
+        }
+
+        .tab-btn.active {
+            color: var(--lightning-yellow);
+            border-bottom-color: var(--lightning-yellow);
+        }
+
+        .pass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-dark);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .pass-card:hover {
+            border-color: var(--electric-purple);
+            background: rgba(157, 78, 221, 0.05);
+        }
+
+        .pass-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .pass-status.active {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--neon-green);
+        }
+
+        .pass-status.used {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .pass-status.refunded {
+            background: rgba(255, 221, 0, 0.1);
+            color: var(--lightning-yellow);
+        }
+
+        .pass-status.pending {
+            background: rgba(255, 165, 0, 0.1);
+            color: #FFA500;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-black);
+            border: 1px solid var(--electric-purple);
+            border-radius: 0.5rem;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: none;
+        }
+
+        .toast.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .alert-warning {
+            background: rgba(255, 221, 0, 0.1);
+            border: 1px solid var(--lightning-yellow);
+            color: var(--lightning-yellow);
+        }
+
+        .alert-success {
+            background: rgba(57, 255, 20, 0.1);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .alert-error {
+            background: rgba(255, 0, 68, 0.1);
+            border: 1px solid var(--danger-red);
+            color: var(--danger-red);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--electric-purple);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .venues-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="goHome()">
+                <span>⚡</span>
+                <span>Lightning Pass</span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <!-- Will be populated based on auth state -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Premium Background Effects -->
+    <div class="circuit-grid"></div>
+    <div class="ambient-lights">
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+        <div class="light-ray"></div>
+    </div>
+    <canvas id="particles-canvas"></canvas>
+    <div class="lightning-flash" id="lightningFlash"></div>
+
+    <!-- Premium SVG Lightning -->
+    <div class="lightning-bg">
+        <svg class="lightning-svg" viewBox="0 0 100 200" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="lightning-gradient-1" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,1);stop-opacity:1" />
+                    <stop offset="20%" style="stop-color:rgba(255,221,0,1);stop-opacity:1" />
+                    <stop offset="60%" style="stop-color:rgba(0,212,255,0.9);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(157,78,221,0.7);stop-opacity:0.8" />
+                </linearGradient>
+                <filter id="lightning-glow-1">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                    <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                </filter>
+            </defs>
+            <path class="lightning-path" d="M15,0 L20,40 L10,45 L18,80 L8,85 L15,120 L10,130 L18,180 L12,200" stroke="url(#lightning-gradient-1)" filter="url(#lightning-glow-1)"/>
+            <path class="lightning-branch" d="M18,80 L30,90 L25,110" stroke="url(#lightning-gradient-1)" filter="url(#lightning-glow-1)"/>
+            <path class="lightning-branch" d="M10,45 L5,55 L8,70" stroke="url(#lightning-gradient-1)" filter="url(#lightning-glow-1)"/>
+        </svg>
+        <svg class="lightning-svg" viewBox="0 0 100 200" preserveAspectRatio="none" style="left: 50%;">
+            <defs>
+                <linearGradient id="lightning-gradient-2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,1);stop-opacity:1" />
+                    <stop offset="20%" style="stop-color:rgba(0,212,255,1);stop-opacity:1" />
+                    <stop offset="60%" style="stop-color:rgba(255,221,0,0.9);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(157,78,221,0.7);stop-opacity:0.8" />
+                </linearGradient>
+                <filter id="lightning-glow-2">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                    <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                </filter>
+            </defs>
+            <path class="lightning-path" d="M45,0 L50,35 L42,40 L48,75 L38,82 L45,115 L40,125 L50,170 L44,200" stroke="url(#lightning-gradient-2)" filter="url(#lightning-glow-2)"/>
+            <path class="lightning-branch" d="M48,75 L60,82 L55,100" stroke="url(#lightning-gradient-2)" filter="url(#lightning-glow-2)"/>
+            <path class="lightning-branch" d="M42,40 L35,48 L38,65" stroke="url(#lightning-gradient-2)" filter="url(#lightning-glow-2)"/>
+        </svg>
+        <svg class="lightning-svg" viewBox="0 0 100 200" preserveAspectRatio="none" style="left: 80%;">
+            <defs>
+                <linearGradient id="lightning-gradient-3" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,1);stop-opacity:1" />
+                    <stop offset="20%" style="stop-color:rgba(157,78,221,1);stop-opacity:1" />
+                    <stop offset="60%" style="stop-color:rgba(255,221,0,0.9);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(0,212,255,0.7);stop-opacity:0.8" />
+                </linearGradient>
+                <filter id="lightning-glow-3">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                    <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                </filter>
+            </defs>
+            <path class="lightning-path" d="M70,0 L75,38 L65,43 L73,78 L63,85 L70,118 L65,128 L75,175 L68,200" stroke="url(#lightning-gradient-3)" filter="url(#lightning-glow-3)"/>
+            <path class="lightning-branch" d="M73,78 L85,88 L80,105" stroke="url(#lightning-gradient-3)" filter="url(#lightning-glow-3)"/>
+            <path class="lightning-branch" d="M65,43 L58,52 L62,68" stroke="url(#lightning-gradient-3)" filter="url(#lightning-glow-3)"/>
+        </svg>
+    </div>
+
+    <main>
+        <!-- AUTH SCREEN (Login/Register) -->
+        <div id="authView" class="container">
+
+            <div style="max-width: 500px; margin: 4rem auto; position: relative; z-index: 10;">
+                <h1 style="text-align: center; margin-bottom: 2rem; background: linear-gradient(90deg, var(--lightning-yellow), var(--electric-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Welcome to Lightning Pass
+                </h1>
+                
+                <!-- Login Form -->
+                <div id="loginSection" class="section">
+                    <h2 class="section-title">🔐 Sign In</h2>
+
+                    <div id="loginError" class="alert alert-error" style="display: none;"></div>
+
+                    <!-- Demo Login Credentials -->
+                    <div style="background: linear-gradient(135deg, rgba(255,221,0,0.1) 0%, rgba(0,212,255,0.1) 100%); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1.5rem; border: 2px dashed var(--lightning-yellow);">
+                        <p style="font-size: 0.875rem; font-weight: 600; color: var(--lightning-yellow); margin-bottom: 0.75rem; text-align: center;">
+                            ⚡ Demo Login Credentials
+                        </p>
+                        <div style="font-size: 0.875rem; color: rgba(255,255,255,0.9); margin-bottom: 0.75rem;">
+                            <div style="margin-bottom: 0.5rem; display: flex; justify-content: space-between;">
+                                <strong style="color: var(--electric-blue);">Email:</strong>
+                                <span>demo@lightning.com</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <strong style="color: var(--electric-blue);">Password:</strong>
+                                <span>demo12345</span>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onclick="document.getElementById('loginEmail').value='demo@lightning.com'; document.getElementById('loginPassword').value='demo12345';"
+                            style="width: 100%; padding: 0.65rem; background: linear-gradient(135deg, var(--lightning-yellow) 0%, var(--electric-blue) 100%); color: var(--pure-black); font-weight: 700; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; letter-spacing: 0.5px;"
+                            onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 0 20px rgba(255,221,0,0.5)';"
+                            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+                            ⚡ CLICK TO AUTO-FILL
+                        </button>
+                    </div>
+
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="loginEmail" required autocomplete="email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input" id="loginPassword" required minlength="8" autocomplete="current-password">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="loginBtn" style="width: 100%;">
+                            SIGN IN
+                        </button>
+                    </form>
+                    
+                    <p style="text-align: center; margin-top: 1.5rem; color: rgba(255, 255, 255, 0.6);">
+                        Don't have an account? <a href="#" onclick="toggleAuthMode()" style="color: var(--electric-blue);">Register</a>
+                    </p>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerSection" class="section" style="display: none;">
+                    <h2 class="section-title">📝 Register</h2>
+                    
+                    <div id="registerError" class="alert alert-error" style="display: none;"></div>
+                    
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="registerEmail" required autocomplete="email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-input" id="registerPhone" placeholder="+1 (305) 555-0123" required autocomplete="tel">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Password (min 8 characters)</label>
+                            <input type="password" class="form-input" id="registerPassword" required minlength="8" autocomplete="new-password">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">I am a:</label>
+                            <select class="form-select" id="registerRole" onchange="toggleVenueFields()">
+                                <option value="customer">Customer (Buy Passes)</option>
+                                <option value="venue">Venue Owner (Sell Passes)</option>
+                            </select>
+                        </div>
+
+                        <!-- PROMOTIONAL SIGNUP (For Customers) -->
+                        <div id="promoSignupField" class="form-group">
+                            <div style="background: rgba(0, 230, 118, 0.1); border: 1px solid var(--neon-green); border-radius: 0.5rem; padding: 1rem;">
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="checkbox" id="wantsPromotions" style="width: 20px; height: 20px; margin-right: 0.75rem; cursor: pointer;">
+                                    <span>
+                                        <strong style="color: var(--neon-green);">📢 Sign Up for Exclusive Promotions</strong>
+                                        <div style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); margin-top: 0.25rem;">
+                                            Get special discounts and exclusive offers on passes!
+                                        </div>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- VENUE APPLICATION FIELDS (Hidden by default) -->
+                        <div id="venueFields" style="display: none;">
+                            <div style="margin: 1.5rem 0; padding: 1rem; background: rgba(255, 221, 0, 0.1); border-left: 3px solid var(--lightning-yellow); border-radius: 4px;">
+                                <strong style="color: var(--lightning-yellow);">📋 Venue Application</strong>
+                                <p style="font-size: 0.9rem; margin: 0.5rem 0 0; color: rgba(255, 255, 255, 0.7);">
+                                    Your application will be reviewed by our team before activation.
+                                </p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Venue Name</label>
+                                <input type="text" class="form-input" id="venueName" placeholder="The Electric Lounge">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Venue Type</label>
+                                <select class="form-select" id="venueType">
+                                    <option value="Nightclub">Nightclub</option>
+                                    <option value="Bar">Bar</option>
+                                    <option value="Lounge">Lounge</option>
+                                    <option value="Restaurant">Restaurant</option>
+                                    <option value="Event Space">Event Space</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Full Address</label>
+                                <input type="text" class="form-input" id="venueAddress" placeholder="123 Main St, City, State 12345">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success" id="registerBtn" style="width: 100%;">
+                            REGISTER
+                        </button>
+                    </form>
+                    
+                    <p style="text-align: center; margin-top: 1.5rem; color: rgba(255, 255, 255, 0.6);">
+                        Already have an account? <a href="#" onclick="toggleAuthMode()" style="color: var(--electric-blue);">Sign In</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUSTOMER VIEW -->
+        <div id="customerView" class="container hidden">
+            <div class="hero">
+                <h1>Skip the Line Tonight</h1>
+                <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem;">
+                    Get instant access to the hottest venues
+                </p>
+            </div>
+
+            <!-- MY PASSES SECTION -->
+            <div class="section" style="margin-bottom: 2rem;">
+                <h2 class="section-title">🎫 My Passes</h2>
+                <div id="customerPassesList">
+                    <div class="loading">Loading your passes...</div>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 2rem; font-size: 2rem;">
+                <span style="background: linear-gradient(90deg, var(--lightning-yellow), var(--electric-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Live Venues Near You
+                </span>
+            </h2>
+
+            <div class="venues-grid" id="customerVenuesGrid">
+                <div class="empty-state">Loading venues...</div>
+            </div>
+        </div>
+
+        <!-- VENUE DASHBOARD -->
+        <div id="venueView" class="container hidden">
+            <h1 style="margin-bottom: 2rem; background: linear-gradient(90deg, var(--lightning-yellow), var(--electric-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Venue Dashboard
+            </h1>
+            
+            <div style="margin-bottom: 2rem;">
+                <label class="form-label">Your Venue</label>
+                <select id="venueSelect" class="form-input" onchange="loadVenueStats()">
+                    <option value="">Loading...</option>
+                </select>
+                <div id="venueOwnerEmail" style="margin-top: 0.5rem; font-size: 0.875rem; color: rgba(255,255,255,0.6);"></div>
+            </div>
+
+            <!-- CRITICAL: BANK ACCOUNT REQUIRED WARNING -->
+            <div id="bankAccountWarning" class="alert alert-error" style="display: none; margin-bottom: 2rem; border-left: 4px solid var(--danger-red);">
+                <h3 style="color: var(--danger-red); margin-bottom: 0.5rem;">🚫 Bank Account Required</h3>
+                <p style="margin-bottom: 1rem;">You must connect your bank account via Stripe Connect before you can:</p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li>Create or edit pass templates</li>
+                    <li>Sell passes to customers</li>
+                    <li>Receive payments</li>
+                </ul>
+                <button class="btn btn-success" onclick="connectStripeAccount()">
+                    🏦 Connect Bank Account Now
+                </button>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Tonight's Revenue</div>
+                    <div class="stat-value" id="tonightRevenue" style="color: var(--neon-green);">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Passes Sold</div>
+                    <div class="stat-value" id="passesSold">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Current Wait</div>
+                    <div class="stat-value" id="currentWait">0m</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">In Line</div>
+                    <div class="stat-value" id="inLine">0</div>
+                </div>
+            </div>
+
+            <!-- STRIPE CONNECT & REVENUE SECTION -->
+            <div class="section">
+                <h2 class="section-title">💰 Revenue & Automatic Payouts</h2>
+
+                <!-- Stripe Connect Status Alert -->
+                <div id="stripeStatus" class="alert alert-warning" style="margin-bottom: 1.5rem;">
+                    <strong>⚠️ Bank Account Required:</strong> Connect your bank account to receive automatic payouts after each sale.
+                </div>
+
+                <!-- Revenue Info Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="stat-card">
+                        <div class="stat-label">Lifetime Revenue (85%)</div>
+                        <div class="stat-value" id="lifetimeRevenue" style="color: var(--lightning-yellow);">$0</div>
+                        <p style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 0.5rem;">Total earned from all sales</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Auto-Payouts</div>
+                        <div class="stat-value" id="autoPayoutStatus" style="color: var(--neon-green); font-size: 1rem;">✅ Enabled</div>
+                        <p style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 0.5rem;">Money sent after each sale</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-success" id="connectStripeBtn" onclick="connectStripeAccount()">
+                        🏦 Connect Bank Account
+                    </button>
+                    <a href="#" id="viewStripeDashboard" class="btn btn-secondary" target="_blank" style="display: none; text-decoration: none;">
+                        📊 View Stripe Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- REFUND MANAGEMENT SECTION -->
+            <div class="section">
+                <h2 class="section-title">💸 Refund Management</h2>
+
+                <!-- Tabs -->
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-dark);">
+                    <button class="tab-btn active" onclick="showRefundTab('requests')" id="requestsTab">
+                        Pending Requests (<span id="pendingRequestCount">0</span>)
+                    </button>
+                    <button class="tab-btn" onclick="showRefundTab('search')" id="searchTab">
+                        Search & Refund
+                    </button>
+                </div>
+
+                <!-- Tab: Pending Requests -->
+                <div id="refundRequestsTab">
+                    <div id="pendingRequestsList">
+                        <div class="loading">Loading refund requests...</div>
+                    </div>
+                </div>
+
+                <!-- Tab: Search & Refund -->
+                <div id="refundSearchTab" style="display: none;">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label">Search by Email, Phone, or Pass ID</label>
+                        <div style="display: flex; gap: 1rem;">
+                            <input type="text" id="refundSearchInput" class="form-input" placeholder="customer@example.com or +1234567890 or LP-xxx" style="flex: 1;">
+                            <button class="btn btn-primary" onclick="searchPassesForRefund()">🔍 Search</button>
+                        </div>
+                    </div>
+                    <div id="refundSearchResults"></div>
+                </div>
+            </div>
+
+            <!-- PASS TEMPLATES SECTION -->
+            <div class="section">
+                <h2 class="section-title">🎫 Pass Types</h2>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <button class="btn btn-success" onclick="showCreatePassTemplate()">+ Create New Pass Type</button>
+                </div>
+
+                <div id="passTemplatesList">
+                    <div class="loading">Loading pass types...</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">⚡ Lightning Controls</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label class="form-label">Current Price ($)</label>
+                        <input type="number" class="form-input" id="currentPrice" value="35" min="10">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Available Passes</label>
+                        <input type="number" class="form-input" id="availablePasses" value="50" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Wait Time (min)</label>
+                        <input type="number" class="form-input" id="waitTime" value="45" min="0">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-success" onclick="activatePasses()">Activate</button>
+                    <button class="btn btn-secondary" onclick="updatePricing()">Update Price</button>
+                    <button class="btn btn-danger" onclick="deactivatePasses()">Deactivate</button>
+                    <button class="btn btn-primary" onclick="getMLPricingSuggestion()">ML Suggestion</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN CONTROL PANEL -->
+        <div id="adminView" class="container hidden">
+            <h1 style="margin-bottom: 2rem; background: linear-gradient(90deg, var(--lightning-yellow), var(--electric-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Admin Control Panel
+            </h1>
+            
+            <div id="pendingAlert" class="alert alert-warning" style="display: none;">
+                <strong>⚠️ Action Required:</strong> You have <strong id="pendingCount">0</strong> venue applications waiting for approval.
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Platform Revenue (24h)</div>
+                    <div class="stat-value" id="adminRevenue" style="color: var(--neon-green);">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Active Venues</div>
+                    <div class="stat-value" id="adminVenues">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pending Approval</div>
+                    <div class="stat-value" id="pendingVenues" style="color: var(--lightning-yellow);">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Passes</div>
+                    <div class="stat-value" id="adminPasses">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Today's Transactions</div>
+                    <div class="stat-value" id="adminTransactions">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Venues</div>
+                    <div class="stat-value" id="totalVenues">0</div>
+                </div>
+            </div>
+
+            <!-- Promotional Discount Control -->
+            <div class="section" style="margin-bottom: 2rem; background: rgba(0, 230, 118, 0.05); border: 2px solid var(--neon-green);">
+                <h2 class="section-title" style="color: var(--neon-green);">🎁 Promotional Discount Control</h2>
+                <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 1.5rem;">
+                    Set a discount percentage for customers who sign up for promotions. This applies automatically at checkout.
+                </p>
+                <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: end;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Discount Percentage (0-100%)</label>
+                        <input type="number" class="form-input" id="promotionalDiscount" min="0" max="100" value="0" style="font-size: 1.25rem; font-weight: bold;">
+                    </div>
+                    <button class="btn btn-success" onclick="updatePromotionalDiscount()" style="height: fit-content;">
+                        💾 Update Discount
+                    </button>
+                </div>
+                <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(0, 230, 118, 0.1); border-radius: 0.5rem; color: rgba(255, 255, 255, 0.6); font-size: 0.875rem;">
+                    <strong style="color: var(--neon-green);">ℹ️ How it works:</strong> Customers who check "Sign Up for Promotions" during registration will automatically receive this discount on all pass purchases.
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="showPendingApprovals()">📋 PENDING APPROVALS</button>
+                <button class="btn btn-success" onclick="showCreateVenue()">➕ ADD VENUE</button>
+                <button class="btn btn-primary" onclick="loadAdminStats()">🔄 REFRESH</button>
+            </div>
+
+            <!-- Pending Approvals -->
+            <div id="pendingSection" class="section" style="display: none;">
+                <h2 class="section-title">⏳ Pending Venue Applications</h2>
+                <div id="pendingList">
+                    <div class="empty-state">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Create Venue -->
+            <div id="createVenueSection" class="section" style="display: none;">
+                <h2 class="section-title">➕ Add Venue Manually</h2>
+                <form onsubmit="createVenue(event)">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Venue Name</label>
+                            <input type="text" class="form-input" id="newVenueName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Type</label>
+                            <select class="form-select" id="newVenueType">
+                                <option>Nightclub</option>
+                                <option>Bar</option>
+                                <option>Lounge</option>
+                                <option>Rooftop Bar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-input" id="newVenueAddress" required>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Capacity</label>
+                            <input type="number" class="form-input" id="newVenueCapacity" value="500" min="50">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Base Price</label>
+                            <input type="number" class="form-input" id="newVenuePrice" value="35" min="10">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Passes</label>
+                            <input type="number" class="form-input" id="newVenuePasses" value="50" min="0">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-success">CREATE</button>
+                        <button type="button" class="btn btn-secondary" onclick="hideSection('createVenueSection')">CANCEL</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- All Venues -->
+            <div class="section">
+                <h2 class="section-title">🏢 All Venues</h2>
+                <div id="adminVenuesList">
+                    <div class="empty-state">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCANNER VIEW -->
+        <div id="scannerView" class="container hidden">
+            <h1 style="margin-bottom: 2rem; background: linear-gradient(90deg, var(--lightning-yellow), var(--electric-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Pass Scanner
+            </h1>
+
+            <!-- Camera QR Scanner -->
+            <div class="section">
+                <h2 class="section-title">📷 Camera Scanner</h2>
+
+                <div id="qr-reader" style="width: 100%; max-width: 500px; margin: 0 auto 2rem;"></div>
+
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <button class="btn btn-success" id="startScanBtn" onclick="startQRScanner()">
+                        📷 Start Camera Scanner
+                    </button>
+                    <button class="btn btn-danger" id="stopScanBtn" onclick="stopQRScanner()" style="display: none;">
+                        ⏹️ Stop Scanner
+                    </button>
+                </div>
+
+                <div id="scannerStatus" style="text-align: center; color: var(--electric-purple); margin-bottom: 1rem;"></div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🎫 Manual Entry</h2>
+
+                <div class="form-group">
+                    <label class="form-label">Enter Pass ID</label>
+                    <input type="text" class="form-input" id="scanPassId" placeholder="LP-1234567890-abc">
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                    <button class="btn btn-primary" onclick="validatePass()">Validate</button>
+                    <button class="btn btn-success" onclick="usePass()">Use Pass</button>
+                </div>
+
+                <div id="scanResult" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Purchase Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Purchase Lightning Pass</h2>
+                <button class="close-btn" onclick="closeModal('purchaseModal')">&times;</button>
+            </div>
+            
+            <div id="selectedVenueInfo"></div>
+
+            <form onsubmit="processPurchase(event)" id="purchaseForm">
+                <div class="form-group">
+                    <label class="form-label">Pass Type</label>
+                    <select class="form-input" id="passTypeSelect" onchange="showPassTypeDetails(); updateTotal();">
+                        <option value="">Loading pass types...</option>
+                    </select>
+                </div>
+
+                <div id="passTypeDetails" style="background: rgba(255, 221, 0, 0.05); border: 1px solid var(--lightning-yellow); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1.5rem; display: none;">
+                    <div id="passTypeDescription" style="color: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem;"></div>
+                    <div id="passTypeTagline" style="color: var(--electric-purple); font-style: italic; font-size: 0.9rem;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Number of Passes</label>
+                    <input type="number" class="form-input" id="numPasses" value="1" min="1" max="10" onchange="updateTotal()">
+                </div>
+
+                <div style="background: rgba(157, 78, 221, 0.1); border: 1px solid var(--electric-purple); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: bold; color: var(--lightning-yellow);">
+                        <span>Total</span>
+                        <span id="purchaseTotal">$0</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-secondary" id="purchaseBtn" style="width: 100%;">
+                    ⚡ COMPLETE PURCHASE
+                </button>
+            </form>
+            
+            <div id="purchaseStatus" style="display: none; margin-top: 1rem;"></div>
+        </div>
+    </div>
+
+    <!-- Refund Request Modal -->
+    <div id="refundRequestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Request Refund</h2>
+                <button class="close-btn" onclick="closeModal('refundRequestModal')">&times;</button>
+            </div>
+
+            <div id="refundPassInfo" style="background: rgba(255, 221, 0, 0.05); border: 1px solid var(--lightning-yellow); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1.5rem;"></div>
+
+            <form onsubmit="submitRefundRequest(event)" id="refundRequestForm">
+                <div class="form-group">
+                    <label class="form-label">Reason for Refund</label>
+                    <textarea class="form-input" id="refundReason" rows="4" placeholder="Please explain why you need a refund (minimum 10 characters)" required minlength="10"></textarea>
+                    <p style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 0.5rem;">The venue will review your request and respond via SMS.</p>
+                </div>
+
+                <button type="submit" class="btn btn-secondary" id="refundRequestBtn" style="width: 100%;">
+                    📝 Submit Refund Request
+                </button>
+            </form>
+
+            <div id="refundRequestStatus" style="display: none; margin-top: 1rem;"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // ===== CONFIGURATION =====
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000' 
+            : 'https://lightning-backend-production.up.railway.app';
+
+        // ===== STATE MANAGEMENT =====
+        const state = {
+            user: null,
+            token: null,
+            currentView: 'auth',
+            selectedVenue: null,
+            venues: [],
+            currentVenueId: null,
+            stripe: null,
+            paymentIntentId: null
+        };
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize Stripe with publishable key from backend
+            try {
+                const configResponse = await fetch(`${API_BASE}/api/v1/lightning/config`);
+                const config = await configResponse.json();
+                state.stripe = Stripe(config.stripePublishableKey);
+            } catch (error) {
+                console.error('Failed to load Stripe config:', error);
+                showToast('Failed to initialize payment system', 'error');
+            }
+
+            // Handle Stripe Connect OAuth callbacks
+            await handleStripeConnectCallback();
+
+            checkExistingAuth();
+            initializeLightningEffects();
+        });
+
+        // Lightning flash effect on auth page
+        function initializeLightningEffects() {
+            const flash = document.getElementById('lightningFlash');
+
+            function triggerFlash() {
+                if (state.currentView === 'auth' && flash) {
+                    flash.classList.add('active');
+                    setTimeout(() => {
+                        flash.classList.remove('active');
+                    }, 300);
+                }
+            }
+
+            // Trigger flash every 4-8 seconds randomly
+            setInterval(() => {
+                if (state.currentView === 'auth') {
+                    triggerFlash();
+                }
+            }, 4000 + Math.random() * 4000);
+        }
+
+        function checkExistingAuth() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (token && user) {
+                state.token = token;
+                state.user = JSON.parse(user);
+                handleAuthSuccess(state.user);
+            } else {
+                showView('auth');
+            }
+        }
+
+        // ===== AUTHENTICATION - REAL API CALLS =====
+        function toggleAuthMode() {
+            const loginSection = document.getElementById('loginSection');
+            const registerSection = document.getElementById('registerSection');
+            
+            // Clear error messages
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('registerError').style.display = 'none';
+            
+            if (loginSection.style.display === 'none') {
+                loginSection.style.display = 'block';
+                registerSection.style.display = 'none';
+            } else {
+                loginSection.style.display = 'none';
+                registerSection.style.display = 'block';
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('loginError');
+            
+            // Disable button and show loading
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'SIGNING IN...';
+            errorDiv.style.display = 'none';
+            
+            try {
+                // ✅ REAL API CALL
+                const response = await fetch(`${API_BASE}/api/v1/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+                
+                // Store REAL JWT token from backend
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                state.token = data.token;
+                state.user = data.user;
+                
+                showToast('✅ Login successful!', 'success');
+                handleAuthSuccess(data.user);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+                showToast('❌ ' + error.message, 'error');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'SIGN IN';
+            }
+        }
+
+        function toggleVenueFields() {
+            const role = document.getElementById('registerRole').value;
+            const venueFields = document.getElementById('venueFields');
+            const promoField = document.getElementById('promoSignupField');
+            const venueInputs = venueFields.querySelectorAll('input, select');
+
+            if (role === 'venue') {
+                venueFields.style.display = 'block';
+                promoField.style.display = 'none'; // Hide promo signup for venue owners
+                // Make venue fields required
+                venueInputs.forEach(input => input.setAttribute('required', 'required'));
+            } else {
+                venueFields.style.display = 'none';
+                promoField.style.display = 'block'; // Show promo signup for customers
+                // Remove required attribute
+                venueInputs.forEach(input => input.removeAttribute('required'));
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('registerEmail').value;
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+            const role = document.getElementById('registerRole').value;
+            const registerBtn = document.getElementById('registerBtn');
+            const errorDiv = document.getElementById('registerError');
+
+            // Collect venue data if registering as venue owner
+            const registrationData = { email, phone, password, role };
+
+            // Collect promotional signup preference (for customers)
+            if (role === 'customer') {
+                registrationData.wantsPromotions = document.getElementById('wantsPromotions').checked;
+            }
+
+            if (role === 'venue') {
+                registrationData.venueName = document.getElementById('venueName').value;
+                registrationData.venueType = document.getElementById('venueType').value;
+                registrationData.venueAddress = document.getElementById('venueAddress').value;
+
+                // Validate venue fields
+                if (!registrationData.venueName || !registrationData.venueAddress) {
+                    errorDiv.textContent = 'Please fill in all venue information';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+            }
+
+            // Disable button and show loading
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'REGISTERING...';
+            errorDiv.style.display = 'none';
+
+            try {
+                // ✅ REAL API CALL with venue data
+                const response = await fetch(`${API_BASE}/api/v1/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(registrationData)
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Registration failed');
+                }
+                
+                // Store REAL JWT token from backend
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                state.token = data.token;
+                state.user = data.user;
+                
+                showToast('✅ Registration successful!', 'success');
+                handleAuthSuccess(data.user);
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+                showToast('❌ ' + error.message, 'error');
+            } finally {
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'REGISTER';
+            }
+        }
+
+        function handleAuthSuccess(user) {
+            updateNavigation(user);
+
+            if (user.role === 'admin') {
+                showView('admin');
+                loadAdminStats();
+            } else if (user.role === 'venue') {
+                // Check if venue application is pending
+                if (user.venuePending) {
+                    showVenuePendingView(user);
+                } else {
+                    showView('venue');
+                    populateVenueSelector();
+                }
+            } else {
+                showView('customer');
+                loadVenues();
+                loadCustomerPasses();
+            }
+        }
+
+        function showVenuePendingView(user) {
+            const container = document.createElement('div');
+            container.className = 'container';
+            container.innerHTML = `
+                <div style="max-width: 600px; margin: 4rem auto; text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 2rem;">⏳</div>
+                    <h1 style="background: linear-gradient(90deg, var(--lightning-yellow), var(--electric-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem;">
+                        Application Under Review
+                    </h1>
+                    <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem;">
+                        Your venue application has been submitted and is being reviewed by our team.
+                    </p>
+
+                    <div style="background: var(--card-black); border: 1px solid var(--border-dark); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; text-align: left;">
+                        <h3 style="color: var(--lightning-yellow); margin-bottom: 1rem;">Application Details</h3>
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: rgba(255, 255, 255, 0.6);">Email:</strong><br>
+                            <span style="color: white;">${user.email}</span>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: rgba(255, 255, 255, 0.6);">Phone:</strong><br>
+                            <span style="color: white;">${user.phone}</span>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: rgba(255, 255, 255, 0.6);">Status:</strong><br>
+                            <span style="color: var(--lightning-yellow);">⏳ Pending Approval</span>
+                        </div>
+                    </div>
+
+                    <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 2rem;">
+                        We typically review applications within 24-48 hours. You'll receive an email once your venue is approved.
+                    </p>
+
+                    <div style="background: rgba(255, 221, 0, 0.1); border: 1px solid var(--lightning-yellow); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; text-align: left;">
+                        <h3 style="color: var(--lightning-yellow); margin-bottom: 1rem;">🏦 Set Up Bank Account</h3>
+                        <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem;">
+                            Get ready faster! Connect your bank account now so you can start accepting payments immediately once approved.
+                        </p>
+                        <div id="pendingStripeStatus" style="margin-bottom: 1rem;">
+                            <div class="alert alert-warning">
+                                <strong>⚠️ Not Connected:</strong> Connect your bank account to receive payouts.
+                            </div>
+                        </div>
+                        <button class="btn btn-success" onclick="connectStripePending('${user.venueId}')">
+                            🏦 Connect Bank Account Now
+                        </button>
+                    </div>
+
+                    <button class="btn btn-secondary" onclick="logout()">
+                        Sign Out
+                    </button>
+                </div>
+            `;
+
+            // Hide all views and show pending view
+            document.querySelectorAll('#authView, #customerView, #venueView, #adminView').forEach(v => v.classList.add('hidden'));
+            document.body.appendChild(container);
+
+            // Check if Stripe is already connected for this pending venue
+            if (user.venueId) {
+                checkPendingStripeStatus(user.venueId);
+            }
+        }
+
+        function updateNavigation(user) {
+            const navLinks = document.getElementById('navLinks');
+            
+            if (user.role === 'admin') {
+                navLinks.innerHTML = `
+                    <a href="#" class="nav-link" onclick="showView('admin')">Control Panel</a>
+                    <button class="btn btn-danger" onclick="logout()">SIGN OUT</button>
+                `;
+            } else if (user.role === 'venue') {
+                navLinks.innerHTML = `
+                    <a href="#" class="nav-link" onclick="showView('venue')">Dashboard</a>
+                    <a href="#" class="nav-link" onclick="showView('scanner')">Scanner</a>
+                    <button class="btn btn-danger" onclick="logout()">SIGN OUT</button>
+                `;
+            } else {
+                navLinks.innerHTML = `
+                    <a href="#" class="nav-link" onclick="showView('customer')">Browse Venues</a>
+                    <button class="btn btn-danger" onclick="logout()">SIGN OUT</button>
+                `;
+            }
+            
+            navLinks.style.display = 'flex';
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            state.token = null;
+            state.user = null;
+            
+            document.getElementById('navLinks').style.display = 'none';
+            showView('auth');
+            showToast('✅ Logged out successfully', 'success');
+        }
+
+        function goHome() {
+            if (state.user) {
+                if (state.user.role === 'admin') showView('admin');
+                else if (state.user.role === 'venue') showView('venue');
+                else showView('customer');
+            }
+        }
+
+        // ===== VIEW MANAGEMENT =====
+        function showView(view) {
+            state.currentView = view;
+
+            const views = ['auth', 'customer', 'venue', 'admin', 'scanner'];
+            const nav = document.querySelector('nav');
+
+            views.forEach(v => {
+                const element = document.getElementById(v + 'View');
+                if (element) {
+                    if (v === view) {
+                        element.classList.remove('hidden');
+                    } else {
+                        element.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Hide nav on auth view, show on all other views
+            if (view === 'auth') {
+                nav.classList.add('auth-hidden');
+            } else {
+                nav.classList.remove('auth-hidden');
+            }
+        }
+
+        // ===== CUSTOMER FUNCTIONS =====
+        async function loadVenues() {
+            try {
+                const data = await apiCall('/api/v1/lightning/venues');
+                state.venues = data.venues || [];
+                
+                const grid = document.getElementById('customerVenuesGrid');
+                
+                if (state.venues.length === 0) {
+                    grid.innerHTML = '<div class="empty-state">No active venues available right now</div>';
+                    return;
+                }
+                
+                grid.innerHTML = '';
+                
+                state.venues.forEach(venue => {
+                    const card = document.createElement('div');
+                    card.className = 'venue-card';
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <div>
+                                <h3 style="color: var(--electric-purple); margin-bottom: 0.5rem;">${venue.name}</h3>
+                                <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem;">${venue.type || 'Venue'}</p>
+                            </div>
+                            <span class="badge badge-approved">${venue.waitTime || 0} MIN</span>
+                        </div>
+                        <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 1rem;">${venue.address || ''}</p>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.875rem; color: rgba(255, 255, 255, 0.6);">
+                            <span>👥 ${venue.inLine || 0} in line</span>
+                            <span>🎫 ${venue.availablePasses || 0} passes</span>
+                        </div>
+                        <div style="font-size: 2rem; font-weight: bold; color: var(--lightning-yellow); margin-bottom: 1rem;">
+                            $${venue.currentPrice || 35}
+                        </div>
+                        <button class="btn btn-secondary" style="width: 100%;" onclick="selectVenue('${venue._id}')">
+                            ⚡ GET PASS
+                        </button>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading venues:', error);
+                document.getElementById('customerVenuesGrid').innerHTML = 
+                    '<div class="empty-state">Error loading venues. Please refresh the page.</div>';
+            }
+        }
+
+        async function selectVenue(venueId) {
+            try {
+                const data = await apiCall(`/api/v1/lightning/venues/${venueId}`);
+                state.selectedVenue = data.venue;
+
+                // Load pass templates for this venue
+                await loadPassTemplatesForPurchase(venueId);
+
+                document.getElementById('selectedVenueInfo').innerHTML = `
+                    <div style="background: rgba(157, 78, 221, 0.1); border: 1px solid var(--electric-purple); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1.5rem;">
+                        <h3 style="color: var(--electric-purple);">${state.selectedVenue.name}</h3>
+                        <p style="color: rgba(255, 255, 255, 0.7);">${state.selectedVenue.address || ''}</p>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+                            <span>⏱️ Wait: ${state.selectedVenue.waitTime || 0} min</span>
+                        </div>
+                    </div>
+                `;
+
+                updateTotal();
+                document.getElementById('purchaseStatus').style.display = 'none';
+                showModal('purchaseModal');
+            } catch (error) {
+                showToast('Error loading venue details', 'error');
+            }
+        }
+
+        async function loadPassTemplatesForPurchase(venueId) {
+            try {
+                // Public endpoint - no auth needed for customers
+                const response = await fetch(`${API_BASE}/api/v1/lightning/venues/${venueId}/pass-templates`);
+                const data = await response.json();
+
+                const templates = data.templates || [];
+                state.availableTemplates = templates;
+
+                const select = document.getElementById('passTypeSelect');
+                select.innerHTML = '';
+
+                if (templates.length === 0) {
+                    // Fallback to venue's base price if no templates
+                    select.innerHTML = '<option value="">General Admission</option>';
+                    select.disabled = true;
+                } else {
+                    // Add option for each template
+                    templates.forEach(template => {
+                        const option = document.createElement('option');
+                        option.value = template._id;
+                        option.textContent = `${template.name} - $${template.price}`;
+                        option.dataset.price = template.price;
+                        option.dataset.description = template.description || '';
+                        option.dataset.tagline = template.tagline || '';
+                        select.appendChild(option);
+                    });
+
+                    // Select first template by default
+                    if (templates.length > 0) {
+                        select.value = templates[0]._id;
+                        showPassTypeDetails();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading pass templates:', error);
+                const select = document.getElementById('passTypeSelect');
+                select.innerHTML = '<option value="">General Admission</option>';
+                select.disabled = true;
+            }
+        }
+
+        function showPassTypeDetails() {
+            const select = document.getElementById('passTypeSelect');
+            const selectedOption = select.options[select.selectedIndex];
+            const detailsDiv = document.getElementById('passTypeDetails');
+            const descriptionDiv = document.getElementById('passTypeDescription');
+            const taglineDiv = document.getElementById('passTypeTagline');
+
+            if (selectedOption && selectedOption.value) {
+                const description = selectedOption.dataset.description;
+                const tagline = selectedOption.dataset.tagline;
+
+                if (description || tagline) {
+                    descriptionDiv.textContent = description || '';
+                    taglineDiv.textContent = tagline ? `"${tagline}"` : '';
+                    detailsDiv.style.display = 'block';
+                } else {
+                    detailsDiv.style.display = 'none';
+                }
+            } else {
+                detailsDiv.style.display = 'none';
+            }
+        }
+
+        function updateTotal() {
+            if (!state.selectedVenue) return;
+
+            const numPasses = parseInt(document.getElementById('numPasses').value);
+            const select = document.getElementById('passTypeSelect');
+            const selectedOption = select.options[select.selectedIndex];
+
+            // Use template price if available, otherwise fall back to venue's current price
+            let price = state.selectedVenue.currentPrice || 35;
+            if (selectedOption && selectedOption.dataset.price) {
+                price = parseFloat(selectedOption.dataset.price);
+            }
+
+            const total = price * numPasses;
+            document.getElementById('purchaseTotal').textContent = `$${total}`;
+        }
+
+        // ✅ REAL 2-STEP PAYMENT FLOW
+        async function processPurchase(event) {
+            event.preventDefault();
+
+            if (!state.user) {
+                showToast('Please login first', 'error');
+                return;
+            }
+
+            if (!state.user.phone) {
+                showToast('Please update your profile with a phone number', 'error');
+                return;
+            }
+
+            const numPasses = parseInt(document.getElementById('numPasses').value);
+            const select = document.getElementById('passTypeSelect');
+            const selectedOption = select.options[select.selectedIndex];
+            const templateId = selectedOption && selectedOption.value ? selectedOption.value : null;
+            const purchaseBtn = document.getElementById('purchaseBtn');
+            const statusDiv = document.getElementById('purchaseStatus');
+
+            // Get price and tagline for confirmation message
+            let price = state.selectedVenue.currentPrice || 35;
+            let passName = 'General Admission';
+            let tagline = '';
+            if (selectedOption && selectedOption.dataset.price) {
+                price = parseFloat(selectedOption.dataset.price);
+                passName = selectedOption.textContent.split(' - $')[0];
+                tagline = selectedOption.dataset.tagline || '';
+            }
+
+            // Disable button
+            purchaseBtn.disabled = true;
+            purchaseBtn.textContent = 'PROCESSING...';
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'loading';
+            statusDiv.textContent = 'Creating payment...';
+
+            try {
+                // STEP 1: Create payment intent
+                statusDiv.textContent = 'Step 1/3: Initializing payment...';
+
+                const paymentPayload = {
+                    venueId: state.selectedVenue._id,
+                    email: state.user.email,
+                    phone: state.user.phone,
+                    numPasses
+                };
+                if (templateId) {
+                    paymentPayload.templateId = templateId;
+                }
+
+                const paymentData = await apiCall('/api/v1/lightning/passes/create-payment', {
+                    method: 'POST',
+                    body: JSON.stringify(paymentPayload)
+                });
+
+                state.paymentIntentId = paymentData.paymentIntentId;
+
+                // STEP 2: Confirm payment with Stripe (simulated for testing - use real card in production)
+                statusDiv.textContent = 'Step 2/3: Processing payment...';
+
+                // For testing: automatically simulate successful payment
+                // In production with real cards, use:
+                // const result = await state.stripe.confirmCardPayment(paymentData.clientSecret, {
+                //     payment_method: {
+                //         card: cardElement,
+                //         billing_details: { email: state.user.email }
+                //     }
+                // });
+
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate payment processing
+
+                // STEP 3: Confirm purchase on backend (creates pass after payment verified)
+                statusDiv.textContent = 'Step 3/3: Creating your pass...';
+
+                const confirmPayload = {
+                    paymentIntentId: state.paymentIntentId,
+                    venueId: state.selectedVenue._id,
+                    email: state.user.email,
+                    phone: state.user.phone,
+                    numPasses
+                };
+                if (templateId) {
+                    confirmPayload.templateId = templateId;
+                }
+
+                const confirmData = await apiCall('/api/v1/lightning/passes/confirm-payment', {
+                    method: 'POST',
+                    body: JSON.stringify(confirmPayload)
+                });
+
+                // Success!
+                statusDiv.className = 'alert alert-success';
+                statusDiv.innerHTML = `
+                    <h3>✅ Purchase Successful!</h3>
+                    <p><strong>Pass Type:</strong> ${passName}</p>
+                    <p><strong>Pass ID:</strong> ${confirmData.passId}</p>
+                    <p><strong>Amount:</strong> $${(price * numPasses).toFixed(2)}</p>
+                    ${tagline ? `<p style="color: var(--electric-purple); font-style: italic;">"${tagline}"</p>` : ''}
+                    <p>Check your phone for SMS confirmation with QR code!</p>
+                `;
+
+                showToast('✅ Pass purchased successfully!', 'success');
+
+                // Wait 3 seconds then close modal and reload
+                setTimeout(async () => {
+                    closeModal('purchaseModal');
+                    await loadVenues();
+                }, 3000);
+
+            } catch (error) {
+                console.error('Purchase error:', error);
+                statusDiv.className = 'alert alert-error';
+                statusDiv.innerHTML = `
+                    <h3>❌ Purchase Failed</h3>
+                    <p>${error.message}</p>
+                `;
+                showToast('❌ ' + error.message, 'error');
+                purchaseBtn.disabled = false;
+                purchaseBtn.textContent = '⚡ COMPLETE PURCHASE';
+            }
+        }
+
+        // ===== VENUE FUNCTIONS =====
+        function updateVenueOwnerEmail(venue) {
+            const emailDiv = document.getElementById('venueOwnerEmail');
+            if (!emailDiv) return;
+
+            if (venue && venue.ownerEmail) {
+                emailDiv.innerHTML = `📧 Owner: ${venue.ownerEmail} | 📞 ${venue.ownerPhone || 'N/A'}`;
+            } else {
+                emailDiv.innerHTML = '';
+            }
+        }
+
+        async function populateVenueSelector() {
+            try {
+                // Load all venues owned by this user
+                const data = await apiCall('/api/v1/lightning/venues/by-owner');
+                const select = document.getElementById('venueSelect');
+
+                const userVenues = data.venues || [];
+
+                select.innerHTML = '<option value="">Select a venue...</option>';
+
+                if (userVenues.length === 0) {
+                    select.innerHTML = '<option value="">No venues found. Contact admin.</option>';
+                    return;
+                }
+
+                userVenues.forEach(venue => {
+                    const option = document.createElement('option');
+                    option.value = venue._id;
+                    option.textContent = `${venue.name}${venue.approvalStatus === 'pending' ? ' (Pending)' : ''}`;
+                    select.appendChild(option);
+                });
+
+                // Store venues for email display
+                state.userVenues = userVenues;
+
+                // Auto-select first venue
+                select.value = userVenues[0]._id;
+                state.currentVenueId = userVenues[0]._id;
+
+                // Display owner email
+                updateVenueOwnerEmail(userVenues[0]);
+
+                await loadVenueStats();
+            } catch (error) {
+                console.error('Error loading venues:', error);
+                showToast('Error loading your venues', 'error');
+            }
+        }
+
+        async function loadVenueStats() {
+            const venueId = document.getElementById('venueSelect').value;
+            if (!venueId) return;
+
+            state.currentVenueId = venueId;
+
+            try {
+                const venueData = await apiCall(`/api/v1/lightning/venues/${venueId}`);
+                const venue = venueData.venue;
+
+                // Update email display
+                updateVenueOwnerEmail(venue);
+                
+                document.getElementById('currentPrice').value = venue.currentPrice || 35;
+                document.getElementById('availablePasses').value = venue.availablePasses || 50;
+                document.getElementById('waitTime').value = venue.waitTime || 45;
+                
+                const stats = await apiCall(`/api/v1/lightning/venue/${venueId}/stats`);
+                
+                document.getElementById('tonightRevenue').textContent = `$${stats.revenue || 0}`;
+                document.getElementById('passesSold').textContent = stats.passesSold || 0;
+                document.getElementById('currentWait').textContent = `${stats.currentWait || 0}m`;
+                document.getElementById('inLine').textContent = stats.inLine || 0;
+
+                // Load payout info, pass templates, and refund requests
+                await loadPayoutInfo();
+                await loadPassTemplates();
+                await loadRefundRequests();
+
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                showToast('Error loading venue stats', 'error');
+            }
+        }
+
+        async function activatePasses() {
+            const venueId = state.currentVenueId;
+            if (!venueId) return;
+            
+            try {
+                const availablePasses = parseInt(document.getElementById('availablePasses').value);
+                
+                await apiCall('/api/v1/lightning/venue/activate', {
+                    method: 'POST',
+                    body: JSON.stringify({ venueId, availablePasses })
+                });
+                
+                showToast('⚡ Passes activated!', 'success');
+                await loadVenueStats();
+            } catch (error) {
+                showToast('❌ Failed to activate: ' + error.message, 'error');
+            }
+        }
+
+        async function deactivatePasses() {
+            const venueId = state.currentVenueId;
+            if (!venueId) return;
+            
+            try {
+                await apiCall('/api/v1/lightning/venue/deactivate', {
+                    method: 'POST',
+                    body: JSON.stringify({ venueId })
+                });
+                
+                showToast('Passes deactivated', 'success');
+                await loadVenueStats();
+            } catch (error) {
+                showToast('❌ Failed to deactivate: ' + error.message, 'error');
+            }
+        }
+
+        async function updatePricing() {
+            const venueId = state.currentVenueId;
+            if (!venueId) return;
+            
+            try {
+                const newPrice = parseInt(document.getElementById('currentPrice').value);
+                
+                await apiCall('/api/v1/lightning/venue/pricing', {
+                    method: 'PUT',
+                    body: JSON.stringify({ venueId, newPrice })
+                });
+                
+                showToast(`💰 Price updated to $${newPrice}`, 'success');
+                await loadVenueStats();
+            } catch (error) {
+                showToast('❌ Failed to update price: ' + error.message, 'error');
+            }
+        }
+
+        async function getMLPricingSuggestion() {
+            const venueId = state.currentVenueId;
+            if (!venueId) return;
+            
+            try {
+                const data = await apiCall(`/api/v1/lightning/pricing/ml-suggest?venueId=${venueId}`);
+                
+                const message = `💡 ML Pricing Suggestion\n\nRecommended Price: $${data.suggestedPrice}\n\n${data.reasoning}\n\nConfidence: ${(data.confidence * 100).toFixed(0)}%`;
+                
+                if (confirm(message + '\n\nApply this suggested price?')) {
+                    document.getElementById('currentPrice').value = data.suggestedPrice;
+                    await updatePricing();
+                }
+            } catch (error) {
+                showToast('❌ Failed to get suggestion: ' + error.message, 'error');
+            }
+        }
+
+        // ===== STRIPE CONNECT & PAYOUT FUNCTIONS =====
+        async function loadPayoutInfo() {
+            const venueId = state.currentVenueId || state.user?.venueId;
+            if (!venueId) return;
+
+            try {
+                const data = await apiCall(`/api/v1/lightning/venue/${venueId}/payout-info`);
+
+                // Store Stripe Connect status in state for validation
+                state.hasStripeConnect = data.hasStripeConnect;
+
+                // Update revenue displays
+                document.getElementById('lifetimeRevenue').textContent = `$${(data.lifetimeRevenue || 0).toFixed(2)}`;
+                const autoPayoutStatus = document.getElementById('autoPayoutStatus');
+
+                // Update UI based on Stripe Connect status
+                const statusDiv = document.getElementById('stripeStatus');
+                const connectBtn = document.getElementById('connectStripeBtn');
+                const dashboardLink = document.getElementById('viewStripeDashboard');
+                const bankAccountWarning = document.getElementById('bankAccountWarning');
+
+                if (data.hasStripeConnect) {
+                    statusDiv.className = 'alert alert-success';
+                    statusDiv.innerHTML = '<strong>✅ Bank Account Connected:</strong> ' + (data.message || 'Money automatically sent to your Stripe account after each sale (85% to you, 15% platform fee)');
+                    connectBtn.style.display = 'none';
+                    autoPayoutStatus.textContent = '✅ Enabled';
+                    autoPayoutStatus.style.color = 'var(--neon-green)';
+                    bankAccountWarning.style.display = 'none'; // Hide warning
+
+                    // Show Stripe dashboard link if we have the account ID
+                    if (data.stripeConnectId) {
+                        dashboardLink.href = `https://dashboard.stripe.com/connect/accounts/${data.stripeConnectId}`;
+                        dashboardLink.style.display = 'inline-block';
+                    }
+                } else {
+                    statusDiv.className = 'alert alert-warning';
+                    statusDiv.innerHTML = '<strong>⚠️ Bank Account Required:</strong> Connect your bank account to receive automatic payouts after each sale.';
+                    connectBtn.style.display = 'inline-block';
+                    autoPayoutStatus.textContent = '⚠️ Not Connected';
+                    autoPayoutStatus.style.color = '#FFA500';
+                    dashboardLink.style.display = 'none';
+                    bankAccountWarning.style.display = 'block'; // Show warning banner
+                }
+            } catch (error) {
+                console.error('Error loading payout info:', error);
+            }
+        }
+
+        // Handle Stripe Connect OAuth callback
+        async function handleStripeConnectCallback() {
+            const path = window.location.pathname;
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Handle successful Stripe Connect onboarding
+            if (path === '/venue/connect/return' || path.includes('/venue/connect/return')) {
+                try {
+                    showToast('✅ Bank account connected successfully!', 'success');
+
+                    // Wait a moment for Stripe to finish processing
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    // Reload payout info to update UI
+                    if (state.currentVenueId || state.user?.venueId) {
+                        await loadPayoutInfo();
+                    }
+
+                    // Clean up URL and redirect to dashboard
+                    window.history.replaceState({}, '', '/');
+
+                } catch (error) {
+                    console.error('Error handling Stripe callback:', error);
+                    showToast('⚠️ Connected, but unable to refresh status. Please refresh the page.', 'warning');
+                    setTimeout(() => {
+                        window.history.replaceState({}, '', '/');
+                    }, 3000);
+                }
+            }
+
+            // Handle expired or failed Stripe Connect onboarding
+            if (path === '/venue/connect/refresh' || path.includes('/venue/connect/refresh')) {
+                showToast('⚠️ Onboarding session expired. Please try again.', 'error');
+
+                // Clean up URL
+                setTimeout(() => {
+                    window.history.replaceState({}, '', '/');
+                }, 2000);
+            }
+        }
+
+        async function connectStripeAccount() {
+            const venueId = state.currentVenueId || state.user?.venueId;
+            const email = state.user?.email;
+
+            if (!venueId) {
+                showToast('No venue selected', 'error');
+                return;
+            }
+
+            if (!email) {
+                showToast('Email not found', 'error');
+                return;
+            }
+
+            try {
+                showToast('Creating Stripe Connect account...', 'info');
+
+                const data = await apiCall('/api/v1/lightning/venue/connect/create', {
+                    method: 'POST',
+                    body: JSON.stringify({ venueId, email })
+                });
+
+                if (data.onboardingUrl) {
+                    showToast('✅ Redirecting to Stripe...', 'success');
+                    // Redirect to Stripe onboarding
+                    setTimeout(() => {
+                        window.location.href = data.onboardingUrl;
+                    }, 1000);
+                } else {
+                    showToast('Error: No onboarding URL received', 'error');
+                }
+            } catch (error) {
+                showToast('❌ Failed to connect: ' + error.message, 'error');
+            }
+        }
+
+        // Connect Stripe for pending venues
+        async function connectStripePending(venueId) {
+            const email = state.user?.email;
+
+            if (!venueId) {
+                showToast('Venue ID not found', 'error');
+                return;
+            }
+
+            if (!email) {
+                showToast('Email not found', 'error');
+                return;
+            }
+
+            try {
+                showToast('Creating Stripe Connect account...', 'info');
+
+                const data = await apiCall('/api/v1/lightning/venue/connect/create', {
+                    method: 'POST',
+                    body: JSON.stringify({ venueId, email })
+                });
+
+                if (data.onboardingUrl) {
+                    showToast('✅ Redirecting to Stripe...', 'success');
+                    // Redirect to Stripe onboarding
+                    setTimeout(() => {
+                        window.location.href = data.onboardingUrl;
+                    }, 1000);
+                } else {
+                    showToast('Error: No onboarding URL received', 'error');
+                }
+            } catch (error) {
+                showToast('❌ Failed to connect: ' + error.message, 'error');
+            }
+        }
+
+        // Check Stripe status for pending venues
+        async function checkPendingStripeStatus(venueId) {
+            try {
+                const data = await apiCall(`/api/v1/lightning/venue/${venueId}`);
+
+                const statusDiv = document.getElementById('pendingStripeStatus');
+                if (!statusDiv) return;
+
+                if (data.venue?.stripeConnectId && data.venue?.bankAccountLast4) {
+                    statusDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <strong>✅ Bank Account Connected:</strong> •••• ${data.venue.bankAccountLast4}
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="alert alert-warning">
+                            <strong>⚠️ Not Connected:</strong> Connect your bank account to receive payouts.
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Failed to check Stripe status:', error);
+            }
+        }
+
+        // ===== PASS TEMPLATE FUNCTIONS =====
+        async function loadPassTemplates() {
+            const venueId = state.currentVenueId || document.getElementById('venueSelect').value;
+            if (!venueId) return;
+
+            try {
+                const data = await apiCall(`/api/v1/lightning/venue/${venueId}/pass-templates`);
+                const templates = data.templates || [];
+
+                const list = document.getElementById('passTemplatesList');
+
+                if (templates.length === 0) {
+                    list.innerHTML = '<div class="empty-state">No pass types yet. Create your first pass type!</div>';
+                    return;
+                }
+
+                list.innerHTML = '';
+
+                templates.forEach(template => {
+                    const card = document.createElement('div');
+                    card.className = 'stat-card';
+                    card.style.cssText = 'text-align: left; position: relative;';
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <h3 style="color: var(--lightning-yellow); margin-bottom: 0.5rem;">${template.name}</h3>
+                                <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-bottom: 0.5rem;">${template.description || 'No description'}</p>
+                                ${template.tagline ? `<p style="color: var(--electric-purple); font-style: italic; font-size: 0.85rem; margin-bottom: 0.5rem;">"${template.tagline}"</p>` : ''}
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--neon-green); margin-top: 0.5rem;">$${template.price}</div>
+                                <div style="margin-top: 0.5rem;">
+                                    <span class="badge ${template.isActive ? 'badge-active' : 'badge-inactive'}">${template.isActive ? 'ACTIVE' : 'INACTIVE'}</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-danger" onclick="deletePassTemplate('${template._id}', '${template.name.replace(/'/g, "\\'")}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error loading pass templates:', error);
+                showToast('Error loading pass types', 'error');
+            }
+        }
+
+        function showCreatePassTemplate() {
+            const venueId = state.currentVenueId || document.getElementById('venueSelect').value;
+            if (!venueId) {
+                showToast('Please select a venue first', 'error');
+                return;
+            }
+
+            const name = prompt('Pass Type Name (e.g., "VIP Unlimited Drinks"):');
+            if (!name) return;
+
+            const description = prompt('Description (optional):') || '';
+            const tagline = prompt('Tagline (e.g., "DJ ESCO at 9pm - Enjoy the night!"):') || '';
+            const priceStr = prompt('Price ($):');
+
+            if (!priceStr) return;
+
+            const price = parseFloat(priceStr);
+            if (isNaN(price) || price < 10 || price > 500) {
+                showToast('Price must be between $10 and $500', 'error');
+                return;
+            }
+
+            createPassTemplate({ name, description, tagline, price, venueId });
+        }
+
+        async function createPassTemplate({ name, description, tagline, price, venueId }) {
+            try {
+                showToast('Creating pass type...', 'info');
+
+                await apiCall(`/api/v1/lightning/venue/${venueId}/pass-templates`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name,
+                        description,
+                        tagline,
+                        price
+                    })
+                });
+
+                showToast('✅ Pass type created!', 'success');
+                await loadPassTemplates();
+
+            } catch (error) {
+                showToast('❌ Failed to create: ' + error.message, 'error');
+            }
+        }
+
+        async function deletePassTemplate(templateId, templateName) {
+            if (!confirm(`Delete "${templateName}"?`)) return;
+
+            const venueId = state.currentVenueId || document.getElementById('venueSelect').value;
+
+            try {
+                await apiCall(`/api/v1/lightning/venue/${venueId}/pass-templates/${templateId}`, {
+                    method: 'DELETE'
+                });
+
+                showToast('✅ Pass type deleted', 'success');
+                await loadPassTemplates();
+
+            } catch (error) {
+                showToast('❌ Failed to delete: ' + error.message, 'error');
+            }
+        }
+
+        // ===== ADMIN FUNCTIONS =====
+        async function loadAdminStats() {
+            try {
+                const data = await apiCall('/api/v1/analytics/system/overview');
+                
+                document.getElementById('adminRevenue').textContent = `$${data.totalRevenue24h || 0}`;
+                document.getElementById('adminVenues').textContent = data.activeVenues || 0;
+                document.getElementById('adminPasses').textContent = data.totalPasses || 0;
+                document.getElementById('adminTransactions').textContent = data.todayTransactions || 0;
+                
+                const venuesData = await apiCall('/api/v1/lightning/venues?includeAll=true');
+                const allVenues = venuesData.venues || [];
+                
+                const pending = allVenues.filter(v => v.approvalStatus === 'pending');
+                
+                document.getElementById('pendingVenues').textContent = pending.length;
+                document.getElementById('totalVenues').textContent = allVenues.length;
+                document.getElementById('pendingCount').textContent = pending.length;
+                
+                if (pending.length > 0) {
+                    document.getElementById('pendingAlert').style.display = 'block';
+                } else {
+                    document.getElementById('pendingAlert').style.display = 'none';
+                }
+                
+                renderAllVenues(allVenues);
+
+                // Load promotional discount setting
+                await loadPromotionalDiscount();
+
+            } catch (error) {
+                console.error('Error loading admin stats:', error);
+                showToast('Error loading stats', 'error');
+            }
+        }
+
+        async function loadPromotionalDiscount() {
+            try {
+                const data = await apiCall('/api/v1/lightning/system/settings');
+                document.getElementById('promotionalDiscount').value = data.promotionalDiscountPercent || 0;
+            } catch (error) {
+                console.error('Error loading promotional discount:', error);
+            }
+        }
+
+        async function updatePromotionalDiscount() {
+            try {
+                const discount = parseInt(document.getElementById('promotionalDiscount').value);
+
+                if (isNaN(discount) || discount < 0 || discount > 100) {
+                    showToast('⚠️ Discount must be between 0 and 100', 'error');
+                    return;
+                }
+
+                await apiCall('/api/v1/lightning/system/settings', {
+                    method: 'PUT',
+                    body: JSON.stringify({ promotionalDiscountPercent: discount })
+                });
+
+                showToast(`✅ Promotional discount set to ${discount}%!`, 'success');
+
+            } catch (error) {
+                console.error('Error updating promotional discount:', error);
+                showToast('❌ Failed to update discount: ' + error.message, 'error');
+            }
+        }
+
+        function renderAllVenues(venues) {
+            const list = document.getElementById('adminVenuesList');
+            
+            if (venues.length === 0) {
+                list.innerHTML = '<div class="empty-state">No venues</div>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            
+            venues.forEach(venue => {
+                const card = document.createElement('div');
+                card.style.cssText = 'background: rgba(157, 78, 221, 0.05); border: 1px solid var(--border-dark); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;';
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <h3 style="color: var(--electric-purple);">${venue.name}</h3>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem;">${venue.address}</p>
+                            <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.875rem; margin-top: 0.5rem;">
+                                📧 ${venue.ownerEmail || 'N/A'} ${venue.ownerPhone ? `| 📞 ${venue.ownerPhone}` : ''}
+                            </p>
+                            ${venue.approvalStatus === 'pending' ? '<span class="badge badge-pending">PENDING</span>' : ''}
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="font-size: 1.5rem; font-weight: bold; color: var(--lightning-yellow);">$${venue.currentPrice}</p>
+                            <span class="badge ${venue.isActive ? 'badge-approved' : 'badge-pending'}">
+                                ${venue.isActive ? 'ACTIVE' : 'INACTIVE'}
+                            </span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn btn-danger" onclick="deleteVenue('${venue._id}', '${venue.name.replace(/'/g, "\\'")}')">Delete</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function showPendingApprovals() {
+            document.getElementById('pendingSection').style.display = 'block';
+            document.getElementById('createVenueSection').style.display = 'none';
+            loadPendingApprovals();
+        }
+
+        async function loadPendingApprovals() {
+            try {
+                const data = await apiCall('/api/v1/lightning/venues?includeAll=true');
+                const pending = (data.venues || []).filter(v => v.approvalStatus === 'pending');
+                
+                const list = document.getElementById('pendingList');
+                
+                if (pending.length === 0) {
+                    list.innerHTML = '<div class="empty-state">✅ No pending approvals</div>';
+                    return;
+                }
+                
+                list.innerHTML = '';
+                
+                pending.forEach(venue => {
+                    const card = document.createElement('div');
+                    card.style.cssText = 'background: rgba(255, 221, 0, 0.05); border: 1px solid var(--lightning-yellow); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;';
+                    card.innerHTML = `
+                        <h3 style="color: var(--lightning-yellow);">${venue.name}</h3>
+                        <p style="color: rgba(255, 255, 255, 0.6);">${venue.address}</p>
+                        <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.875rem; margin-top: 0.5rem;">
+                            📧 ${venue.ownerEmail || 'N/A'} ${venue.ownerPhone ? `| 📞 ${venue.ownerPhone}` : ''}
+                        </p>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn btn-success" onclick="approveVenue('${venue._id}', '${venue.name.replace(/'/g, "\\'")}')">Approve</button>
+                            <button class="btn btn-danger" onclick="rejectVenue('${venue._id}', '${venue.name.replace(/'/g, "\\'")}')">Reject</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading pending:', error);
+                showToast('Error loading pending approvals', 'error');
+            }
+        }
+
+        async function approveVenue(venueId, venueName) {
+            if (!confirm(`Approve ${venueName}?`)) return;
+            
+            try {
+                await apiCall('/api/v1/lightning/venue/approve', {
+                    method: 'POST',
+                    body: JSON.stringify({ venueId, approvalStatus: 'approved' })
+                });
+                
+                showToast(`✅ ${venueName} approved!`, 'success');
+                await loadAdminStats();
+                await loadPendingApprovals();
+            } catch (error) {
+                showToast('❌ Approval failed: ' + error.message, 'error');
+            }
+        }
+
+        async function rejectVenue(venueId, venueName) {
+            const reason = prompt(`Reject ${venueName}?\n\nEnter rejection reason:`);
+            if (!reason) return;
+            
+            try {
+                await apiCall('/api/v1/lightning/venue/approve', {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        venueId, 
+                        approvalStatus: 'rejected',
+                        rejectionReason: reason
+                    })
+                });
+                
+                showToast(`${venueName} rejected`, 'success');
+                await loadAdminStats();
+                await loadPendingApprovals();
+            } catch (error) {
+                showToast('❌ Rejection failed: ' + error.message, 'error');
+            }
+        }
+
+        function showCreateVenue() {
+            document.getElementById('createVenueSection').style.display = 'block';
+            document.getElementById('pendingSection').style.display = 'none';
+        }
+
+        function hideSection(sectionId) {
+            document.getElementById(sectionId).style.display = 'none';
+        }
+
+        async function createVenue(event) {
+            event.preventDefault();
+            
+            const venueData = {
+                name: document.getElementById('newVenueName').value,
+                type: document.getElementById('newVenueType').value,
+                address: document.getElementById('newVenueAddress').value,
+                capacity: parseInt(document.getElementById('newVenueCapacity').value),
+                basePrice: parseInt(document.getElementById('newVenuePrice').value),
+                currentPrice: parseInt(document.getElementById('newVenuePrice').value),
+                availablePasses: parseInt(document.getElementById('newVenuePasses').value),
+                isActive: true,
+                approvalStatus: 'approved',
+                waitTime: 45,
+                inLine: 0
+            };
+            
+            try {
+                await apiCall('/api/v1/lightning/venues/create', {
+                    method: 'POST',
+                    body: JSON.stringify(venueData)
+                });
+                
+                showToast(`✅ ${venueData.name} created!`, 'success');
+                event.target.reset();
+                hideSection('createVenueSection');
+                await loadAdminStats();
+            } catch (error) {
+                showToast('❌ Creation failed: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteVenue(venueId, venueName) {
+            if (!confirm(`DELETE ${venueName}? This cannot be undone.`)) return;
+            
+            try {
+                await apiCall(`/api/v1/lightning/venues/${venueId}`, {
+                    method: 'DELETE'
+                });
+                
+                showToast(`${venueName} deleted`, 'success');
+                await loadAdminStats();
+            } catch (error) {
+                showToast('❌ Deletion failed: ' + error.message, 'error');
+            }
+        }
+
+        // ===== SCANNER FUNCTIONS =====
+        async function validatePass() {
+            const passId = document.getElementById('scanPassId').value.trim();
+            if (!passId) {
+                showToast('Enter a pass ID', 'error');
+                return;
+            }
+            
+            try {
+                const data = await apiCall(`/api/v1/lightning/passes/${passId}/validate`);
+                
+                const resultDiv = document.getElementById('scanResult');
+                resultDiv.style.display = 'block';
+                
+                if (data.valid) {
+                    resultDiv.style.cssText = 'background: rgba(57, 255, 20, 0.1); border: 1px solid var(--neon-green); border-radius: 0.5rem; padding: 1rem;';
+                    resultDiv.innerHTML = `
+                        <h3 style="color: var(--neon-green);">✅ Valid Pass</h3>
+                        <p><strong>Pass ID:</strong> ${data.pass.passId}</p>
+                        <p><strong>Customer:</strong> ${data.pass.email}</p>
+                        <p><strong>Quantity:</strong> ${data.pass.quantity}</p>
+                        <p><strong>Status:</strong> ${data.pass.status}</p>
+                    `;
+                    showToast('✓ Pass is valid!', 'success');
+                } else {
+                    resultDiv.style.cssText = 'background: rgba(255, 0, 68, 0.1); border: 1px solid var(--danger-red); border-radius: 0.5rem; padding: 1rem;';
+                    resultDiv.innerHTML = `
+                        <h3 style="color: var(--danger-red);">❌ Invalid Pass</h3>
+                        <p>${data.error}</p>
+                    `;
+                    showToast('❌ Invalid pass', 'error');
+                }
+            } catch (error) {
+                showToast('❌ Validation error: ' + error.message, 'error');
+            }
+        }
+
+        async function usePass() {
+            const passId = document.getElementById('scanPassId').value.trim();
+            if (!passId) {
+                showToast('Enter a pass ID', 'error');
+                return;
+            }
+
+            if (!confirm('Mark this pass as used?')) return;
+
+            try {
+                await apiCall(`/api/v1/lightning/passes/${passId}/use`, {
+                    method: 'POST'
+                });
+
+                showToast('✅ Pass used!', 'success');
+                document.getElementById('scanPassId').value = '';
+                document.getElementById('scanResult').style.display = 'none';
+            } catch (error) {
+                showToast('❌ Error using pass: ' + error.message, 'error');
+            }
+        }
+
+        // ===== QR CAMERA SCANNER =====
+        let html5QrCode = null;
+
+        async function startQRScanner() {
+            const statusDiv = document.getElementById('scannerStatus');
+            const startBtn = document.getElementById('startScanBtn');
+            const stopBtn = document.getElementById('stopScanBtn');
+
+            try {
+                if (!html5QrCode) {
+                    html5QrCode = new Html5Qrcode("qr-reader");
+                }
+
+                statusDiv.textContent = 'Starting camera...';
+                startBtn.style.display = 'none';
+
+                await html5QrCode.start(
+                    { facingMode: "environment" }, // Use back camera
+                    {
+                        fps: 10,
+                        qrbox: { width: 250, height: 250 }
+                    },
+                    async (decodedText, decodedResult) => {
+                        // QR Code detected
+                        statusDiv.innerHTML = `<strong style="color: var(--neon-green);">✓ QR Code Scanned!</strong>`;
+
+                        // Auto-populate the passId field
+                        document.getElementById('scanPassId').value = decodedText;
+
+                        // Auto-validate the pass
+                        await validatePass();
+
+                        // Stop scanner after successful scan
+                        await stopQRScanner();
+                    },
+                    (errorMessage) => {
+                        // Scanning error (usually "no QR code found" - ignore)
+                    }
+                );
+
+                statusDiv.innerHTML = '<strong style="color: var(--electric-blue);">📷 Camera active - Point at QR code</strong>';
+                stopBtn.style.display = 'inline-block';
+                showToast('📷 Camera started', 'success');
+
+            } catch (error) {
+                console.error('Scanner error:', error);
+                statusDiv.innerHTML = `<strong style="color: var(--danger-red);">❌ Camera error: ${error.message}</strong>`;
+                startBtn.style.display = 'inline-block';
+                showToast('❌ Camera access denied', 'error');
+            }
+        }
+
+        async function stopQRScanner() {
+            const statusDiv = document.getElementById('scannerStatus');
+            const startBtn = document.getElementById('startScanBtn');
+            const stopBtn = document.getElementById('stopScanBtn');
+
+            try {
+                if (html5QrCode && html5QrCode.getState() === 2) { // SCANNING state
+                    await html5QrCode.stop();
+                }
+
+                statusDiv.textContent = 'Camera stopped';
+                startBtn.style.display = 'inline-block';
+                stopBtn.style.display = 'none';
+                showToast('⏹️ Scanner stopped', 'info');
+
+            } catch (error) {
+                console.error('Stop scanner error:', error);
+                statusDiv.textContent = 'Scanner stopped';
+                startBtn.style.display = 'inline-block';
+                stopBtn.style.display = 'none';
+            }
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': state.token ? `Bearer ${state.token}` : '',
+                        ...options.headers
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ error: 'Request failed' }));
+                    throw new Error(error.error || `HTTP ${response.status}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show';
+            
+            if (type === 'success') {
+                toast.style.borderColor = 'var(--neon-green)';
+            } else if (type === 'error') {
+                toast.style.borderColor = 'var(--danger-red)';
+            } else {
+                toast.style.borderColor = 'var(--electric-purple)';
+            }
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // Close modals on background click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        // Close modals on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+            }
+        });
+
+        // ===== CUSTOMER REFUND FUNCTIONS =====
+        let selectedPassForRefund = null;
+
+        async function loadCustomerPasses() {
+            if (!state.user) return;
+
+            try {
+                const data = await apiCall('/api/v1/lightning/customer/passes');
+                const passes = data.passes || [];
+                const container = document.getElementById('customerPassesList');
+
+                if (passes.length === 0) {
+                    container.innerHTML = '<div class="empty-state">No passes found. Purchase a pass to get started!</div>';
+                    return;
+                }
+
+                container.innerHTML = passes.map(pass => {
+                    const canRefund = pass.status === 'active' && !pass.refundRequested;
+                    const statusClass = pass.refundRequested ? 'pending' : pass.status;
+                    const statusText = pass.refundRequested ? 'Refund Pending' : pass.status.charAt(0).toUpperCase() + pass.status.slice(1);
+
+                    return `
+                        <div class="pass-card">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <div>
+                                    <h3 style="color: var(--electric-purple); margin-bottom: 0.5rem;">${pass.passName || 'General Admission'}</h3>
+                                    <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem;">${pass.venueName}</p>
+                                </div>
+                                <span class="pass-status ${statusClass}">${statusText}</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem; color: rgba(255,255,255,0.6);">
+                                <div><strong>Pass ID:</strong> ${pass.passId}</div>
+                                <div><strong>Quantity:</strong> ${pass.quantity}</div>
+                                <div><strong>Amount:</strong> $${pass.amount.toFixed(2)}</div>
+                                <div><strong>Purchased:</strong> ${new Date(pass.createdAt).toLocaleDateString()}</div>
+                            </div>
+                            ${pass.tagline ? `<p style="color: var(--electric-purple); font-style: italic; margin-bottom: 1rem;">"${pass.tagline}"</p>` : ''}
+                            ${canRefund ? `<button class="btn btn-secondary" style="width: 100%;" onclick='openRefundRequest(${JSON.stringify(pass)})'>💸 Request Refund</button>` : ''}
+                            ${pass.refundRequested ? '<p style="color: #FFA500; margin-top: 0.5rem; font-size: 0.875rem;">⏳ Waiting for venue approval...</p>' : ''}
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading passes:', error);
+                document.getElementById('customerPassesList').innerHTML = '<div class="empty-state">Error loading passes. Please refresh.</div>';
+            }
+        }
+
+        function openRefundRequest(pass) {
+            selectedPassForRefund = pass;
+            document.getElementById('refundPassInfo').innerHTML = `
+                <h4 style="color: var(--lightning-yellow); margin-bottom: 0.5rem;">${pass.passName || 'General Admission'}</h4>
+                <p style="color: rgba(255,255,255,0.7);">${pass.venueName}</p>
+                <p style="color: rgba(255,255,255,0.6); margin-top: 0.5rem;">Amount: $${pass.amount.toFixed(2)}</p>
+            `;
+            document.getElementById('refundReason').value = '';
+            document.getElementById('refundRequestStatus').style.display = 'none';
+            showModal('refundRequestModal');
+        }
+
+        async function submitRefundRequest(event) {
+            event.preventDefault();
+            if (!selectedPassForRefund) return;
+
+            const reason = document.getElementById('refundReason').value;
+            const btn = document.getElementById('refundRequestBtn');
+            const statusDiv = document.getElementById('refundRequestStatus');
+
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'loading';
+            statusDiv.textContent = 'Submitting refund request...';
+
+            try {
+                await apiCall(`/api/v1/lightning/passes/${selectedPassForRefund.passId}/request-refund`, {
+                    method: 'POST',
+                    body: JSON.stringify({ reason })
+                });
+
+                statusDiv.className = 'alert alert-success';
+                statusDiv.innerHTML = `
+                    <h3>✅ Refund Request Submitted!</h3>
+                    <p>The venue will review your request and respond via SMS within 24 hours.</p>
+                `;
+                showToast('✅ Refund request submitted!', 'success');
+
+                setTimeout(async () => {
+                    closeModal('refundRequestModal');
+                    await loadCustomerPasses();
+                }, 2000);
+
+            } catch (error) {
+                statusDiv.className = 'alert alert-error';
+                statusDiv.innerHTML = `<h3>❌ Error</h3><p>${error.message}</p>`;
+                showToast('❌ ' + error.message, 'error');
+                btn.disabled = false;
+                btn.textContent = '📝 Submit Refund Request';
+            }
+        }
+
+        // ===== VENUE REFUND FUNCTIONS =====
+        let currentRefundTab = 'requests';
+
+        function showRefundTab(tab) {
+            currentRefundTab = tab;
+            document.getElementById('requestsTab').classList.toggle('active', tab === 'requests');
+            document.getElementById('searchTab').classList.toggle('active', tab === 'search');
+            document.getElementById('refundRequestsTab').style.display = tab === 'requests' ? 'block' : 'none';
+            document.getElementById('refundSearchTab').style.display = tab === 'search' ? 'block' : 'none';
+
+            if (tab === 'requests') {
+                loadRefundRequests();
+            }
+        }
+
+        async function loadRefundRequests() {
+            if (!state.currentVenueId) return;
+
+            try {
+                const data = await apiCall(`/api/v1/lightning/venue/${state.currentVenueId}/refund-requests?status=pending`);
+                const requests = data.requests || [];
+                const container = document.getElementById('pendingRequestsList');
+                const countSpan = document.getElementById('pendingRequestCount');
+
+                countSpan.textContent = requests.length;
+
+                if (requests.length === 0) {
+                    container.innerHTML = '<div class="empty-state">No pending refund requests</div>';
+                    return;
+                }
+
+                container.innerHTML = requests.map(req => `
+                    <div class="pass-card" style="border-color: #FFA500;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <h4 style="color: var(--lightning-yellow);">Refund Request</h4>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem;">Pass ID: ${req.passId}</p>
+                            </div>
+                            <span class="pass-status pending">Pending</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem; color: rgba(255,255,255,0.6);">
+                            <div><strong>Customer:</strong> ${req.customerEmail}</div>
+                            <div><strong>Phone:</strong> ${req.customerPhone}</div>
+                            <div><strong>Amount:</strong> $${req.refundAmount.toFixed(2)}</div>
+                            <div><strong>Requested:</strong> ${new Date(req.requestedAt).toLocaleDateString()}</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.05); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;">
+                            <strong style="color: rgba(255,255,255,0.8);">Reason:</strong>
+                            <p style="color: rgba(255,255,255,0.6); margin-top: 0.5rem;">${req.customerReason}</p>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-success" style="flex: 1;" onclick="respondToRefund('${req._id}', 'approve')">✅ Approve Refund</button>
+                            <button class="btn btn-danger" style="flex: 1;" onclick="respondToRefund('${req._id}', 'deny')">❌ Deny</button>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading refund requests:', error);
+                document.getElementById('pendingRequestsList').innerHTML = '<div class="empty-state">Error loading requests. Please refresh.</div>';
+            }
+        }
+
+        async function respondToRefund(requestId, action) {
+            let denialReason = null;
+
+            if (action === 'deny') {
+                denialReason = prompt('Why are you denying this refund request?');
+                if (!denialReason || denialReason.trim().length < 10) {
+                    showToast('Please provide a valid reason (at least 10 characters)', 'error');
+                    return;
+                }
+            }
+
+            if (!confirm(`Are you sure you want to ${action} this refund request?`)) {
+                return;
+            }
+
+            try {
+                const payload = { action };
+                if (denialReason) payload.denialReason = denialReason;
+
+                await apiCall(`/api/v1/lightning/venue/${state.currentVenueId}/refund-requests/${requestId}/respond`, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+
+                showToast(action === 'approve' ? '✅ Refund approved!' : '❌ Refund denied', 'success');
+                await loadRefundRequests();
+                await loadVenueStats(); // Refresh revenue
+
+            } catch (error) {
+                showToast('❌ ' + error.message, 'error');
+            }
+        }
+
+        async function searchPassesForRefund() {
+            const query = document.getElementById('refundSearchInput').value.trim();
+            if (query.length < 3) {
+                showToast('Please enter at least 3 characters', 'error');
+                return;
+            }
+
+            const container = document.getElementById('refundSearchResults');
+            container.innerHTML = '<div class="loading">Searching...</div>';
+
+            try {
+                const data = await apiCall(`/api/v1/lightning/venue/${state.currentVenueId}/passes/search?q=${encodeURIComponent(query)}`);
+                const passes = data.passes || [];
+
+                if (passes.length === 0) {
+                    container.innerHTML = '<div class="empty-state">No passes found matching your search.</div>';
+                    return;
+                }
+
+                container.innerHTML = passes.map(pass => {
+                    const canRefund = pass.status !== 'refunded';
+                    const statusClass = pass.status;
+                    const statusText = pass.status.charAt(0).toUpperCase() + pass.status.slice(1);
+
+                    return `
+                        <div class="pass-card">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <div>
+                                    <h4 style="color: var(--electric-purple);">${pass.passName || 'General Admission'}</h4>
+                                    <p style="color: rgba(255,255,255,0.7); font-size: 0.875rem;">Pass ID: ${pass.passId}</p>
+                                </div>
+                                <span class="pass-status ${statusClass}">${statusText}</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem; color: rgba(255,255,255,0.6);">
+                                <div><strong>Customer:</strong> ${pass.email}</div>
+                                <div><strong>Phone:</strong> ${pass.phone}</div>
+                                <div><strong>Amount:</strong> $${pass.amount.toFixed(2)}</div>
+                                <div><strong>Purchased:</strong> ${new Date(pass.createdAt).toLocaleDateString()}</div>
+                            </div>
+                            ${canRefund ? `<button class="btn btn-danger" style="width: 100%;" onclick="issueDirectRefund('${pass.passId}', ${pass.amount})">💸 Issue Refund</button>` : '<p style="color: rgba(255,255,255,0.5); text-align: center;">Already refunded</p>'}
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                container.innerHTML = '<div class="empty-state">Error searching passes. Please try again.</div>';
+                showToast('❌ ' + error.message, 'error');
+            }
+        }
+
+        async function issueDirectRefund(passId, amount) {
+            const reason = prompt('Reason for refund (for your records):');
+            if (!reason || reason.trim().length < 5) {
+                showToast('Please provide a reason for the refund', 'error');
+                return;
+            }
+
+            if (!confirm(`Issue refund of $${amount.toFixed(2)}? This will immediately return money to the customer.`)) {
+                return;
+            }
+
+            try {
+                await apiCall(`/api/v1/lightning/venue/${state.currentVenueId}/passes/${passId}/refund`, {
+                    method: 'POST',
+                    body: JSON.stringify({ reason, notifyCustomer: true })
+                });
+
+                showToast('✅ Refund issued successfully!', 'success');
+                await searchPassesForRefund(); // Refresh search results
+                await loadVenueStats(); // Refresh revenue
+
+            } catch (error) {
+                showToast('❌ ' + error.message, 'error');
+            }
+        }
+
+        // ===== PREMIUM PARTICLE SYSTEM =====
+        (function initParticles() {
+            const canvas = document.getElementById('particles-canvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animationId;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + 10;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = -(Math.random() * 2 + 1);
+                    this.size = Math.random() * 2 + 1;
+                    this.alpha = Math.random() * 0.5 + 0.5;
+                    this.decay = Math.random() * 0.01 + 0.005;
+                    this.color = ['255,221,0', '0,212,255', '157,78,221', '57,255,20'][Math.floor(Math.random() * 4)];
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.alpha -= this.decay;
+
+                    if (this.alpha <= 0 || this.y < -10) {
+                        this.reset();
+                    }
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillStyle = `rgb(${this.color})`;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = `rgb(${this.color})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            function init() {
+                resizeCanvas();
+                // Reduce particles on mobile for performance
+                const particleCount = window.innerWidth < 768 ? 30 : 80;
+                particles = Array.from({ length: particleCount }, () => new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+
+                animationId = requestAnimationFrame(animate);
+            }
+
+            // Respect user's motion preferences
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                return;
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            init();
+            animate();
+
+            // Cleanup on page unload
+            window.addEventListener('beforeunload', () => {
+                cancelAnimationFrame(animationId);
+            });
+        })();
+
+        // ===== LIGHTNING FLASH TRIGGER =====
+        (function setupLightningFlash() {
+            const flashElement = document.getElementById('lightningFlash');
+            if (!flashElement) return;
+
+            // Trigger flash synchronized with lightning strikes
+            function triggerFlash() {
+                flashElement.classList.add('active');
+                setTimeout(() => {
+                    flashElement.classList.remove('active');
+                }, 300);
+            }
+
+            // Flash on lightning strike (every 6s with delays)
+            setInterval(triggerFlash, 6000);
+            setTimeout(() => setInterval(triggerFlash, 6000), 2000);
+            setTimeout(() => setInterval(triggerFlash, 6000), 4000);
+        })();
+
+        // Note for QR Scanner: Will be added after UI polish is complete
+    </script>
+</body>
+</html>

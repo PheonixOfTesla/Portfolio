@@ -1001,28 +1001,40 @@
                 <div class="project-body">
                     <p>Event ticketing and venue management platform with seamless payment processing and real-time attendance tracking.</p>
 
-                    <!-- Screenshot Carousel -->
-                    <div class="screenshot-carousel">
-                        <div class="carousel-container">
-                            <button class="carousel-nav prev">‹</button>
-                            <div class="carousel-slides">
-                                <!-- Lightning Pass Screenshots -->
-                                <div class="carousel-slide">
-                                    <img src="lightning-venues.png" alt="Lightning Pass - Live Venues Browse Page">
-                                </div>
-                                <div class="carousel-slide">
-                                    <img src="lightning-purchase.png" alt="Lightning Pass - Ticket Purchase Flow">
-                                </div>
-                                <div class="carousel-slide">
-                                    <img src="lightning-dashboard.png" alt="Lightning Pass - Venue Dashboard">
-                                </div>
-                            </div>
-                            <button class="carousel-nav next">›</button>
-                        </div>
-                        <div class="carousel-dots">
-                            <button class="carousel-dot active"></button>
-                            <button class="carousel-dot"></button>
-                            <button class="carousel-dot"></button>
+                    <!-- In-App Demo -->
+                    <div style="margin: 1.5rem 0; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+                        <iframe
+                            src="demos/lightning-pass-demo.html"
+                            style="width: 100%; height: 600px; border: none; display: block;"
+                            title="Lightning Pass - Interactive Demo"
+                            sandbox="allow-scripts allow-same-origin allow-forms">
+                        </iframe>
+                    </div>
+
+                    <!-- Navigation Panel -->
+                    <div style="padding: 1.5rem; background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); border-radius: 12px; margin-top: 1rem; border: 1px solid rgba(255,221,0,0.2);">
+                        <p style="text-align: center; font-weight: 600; margin-bottom: 1rem; color: #ffdd00;">
+                            ⚡ Explore Lightning Pass Features
+                        </p>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                            <a href="demos/lightning-pass-demo.html" target="_blank"
+                               style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #ffdd00 0%, #00d4ff 100%);
+                                      color: #000; border-radius: 8px; text-decoration: none; font-weight: 600;
+                                      transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem;
+                                      box-shadow: 0 4px 12px rgba(255, 221, 0, 0.3);"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(255, 221, 0, 0.5)';"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(255, 221, 0, 0.3)';">
+                                ⚡ Open Full Demo
+                            </a>
+                            <a href="https://lightning-app-peach.vercel.app" target="_blank"
+                               style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #9d4edd 0%, #00d4ff 100%);
+                                      color: white; border-radius: 8px; text-decoration: none; font-weight: 600;
+                                      transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem;
+                                      box-shadow: 0 4px 12px rgba(157, 78, 221, 0.3);"
+                               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(157, 78, 221, 0.4)';"
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(157, 78, 221, 0.3)';">
+                                🚀 Live Production Site
+                            </a>
                         </div>
                     </div>
 
@@ -1033,10 +1045,6 @@
                         <li>Real-time queue and capacity management</li>
                         <li>Cross-platform mobile-first design</li>
                     </ul>
-                    <div class="project-links">
-                        <a href="https://lightning-app-peach.vercel.app" class="project-link" target="_blank">Live Demo</a>
-                        <a href="https://github.com/PheonixOfTesla/Lightning-App" class="project-link secondary" target="_blank">GitHub</a>
-                    </div>
                 </div>
             </div>
 
