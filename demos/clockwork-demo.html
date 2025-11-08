@@ -1041,10 +1041,38 @@ const [resetEmail, setResetEmail] = useState('');
               const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
+        const email = formData.email?.toLowerCase().trim();
+        const password = formData.password;
+
+        // DEMO MODE: Check for hardcoded demo credentials
+        if (!isSignup && email === 'demo@clockwork.com' && password === 'demo123') {
+            // Simulate demo user login with fake data
+            const demoUser = {
+                _id: 'demo-user-456',
+                name: 'Demo User',
+                email: 'demo@clockwork.com',
+                roles: ['specialist', 'admin'],
+                createdAt: new Date().toISOString()
+            };
+
+            const demoToken = 'demo-token-clockwork-' + Date.now();
+
+            localStorage.setItem('token', demoToken);
+            localStorage.setItem('user', JSON.stringify(demoUser));
+
+            // Short delay to simulate API call
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            onLogin(demoUser);
+            setLoading(false);
+            return;
+        }
+
+        // NORMAL MODE: Actual API call
         const endpoint = isSignup ? '/auth/register' : '/auth/login';
-        
+
         // Direct fetch to avoid API_CONFIG wrapper issues
         const response = await fetch(`${API_CONFIG.baseURL}${endpoint}`, {
             method: 'POST',
@@ -1054,12 +1082,12 @@ const [resetEmail, setResetEmail] = useState('');
             },
             body: JSON.stringify({
     name: formData.name?.trim(),
-    email: formData.email?.toLowerCase().trim(),
-    password: formData.password,
+    email: email,
+    password: password,
     roles: ['client']  // Add this line
 })
         });
-        
+
         // Always try to parse JSON response
         let data;
         try {
@@ -1068,7 +1096,7 @@ const [resetEmail, setResetEmail] = useState('');
             // If response isn't JSON, handle gracefully
             data = { message: 'Server response error' };
         }
-        
+
         // Handle all possible response codes
         if (response.ok) {
             // Success (200-299)
@@ -1083,7 +1111,7 @@ const [resetEmail, setResetEmail] = useState('');
         } else {
             // Error responses (400+)
             const errorMessage = data.message || data.error || `Server error (${response.status})`;
-            
+
             // User-friendly error messages
             if (response.status === 400 && errorMessage.includes('already exists')) {
                 throw new Error('An account with this email already exists. Please login instead.');

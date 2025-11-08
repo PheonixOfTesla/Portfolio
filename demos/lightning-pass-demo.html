@@ -1566,41 +1566,77 @@
 
         async function handleLogin(event) {
             event.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
+
+            const email = document.getElementById('loginEmail').value.toLowerCase().trim();
             const password = document.getElementById('loginPassword').value;
             const loginBtn = document.getElementById('loginBtn');
             const errorDiv = document.getElementById('loginError');
-            
+
             // Disable button and show loading
             loginBtn.disabled = true;
             loginBtn.textContent = 'SIGNING IN...';
             errorDiv.style.display = 'none';
-            
+
             try {
-                // ✅ REAL API CALL
+                // DEMO MODE: Check for hardcoded demo credentials
+                if (email === 'demo@lightning.com' && password === 'demo12345') {
+                    // Simulate API delay
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    // Create demo user data
+                    const demoUser = {
+                        _id: 'demo-user-789',
+                        email: 'demo@lightning.com',
+                        role: 'venue',
+                        name: 'Demo Venue',
+                        phone: '+1 (555) 123-4567',
+                        venueName: 'Lightning Demo Venue',
+                        venueType: 'nightclub',
+                        venueAddress: '123 Demo Street, Miami, FL 33139',
+                        venueCapacity: 500,
+                        acceptsCard: true,
+                        acceptsCash: true,
+                        isActive: true,
+                        createdAt: new Date().toISOString()
+                    };
+
+                    const demoToken = 'demo-token-lightning-' + Date.now();
+
+                    // Store demo credentials
+                    localStorage.setItem('token', demoToken);
+                    localStorage.setItem('user', JSON.stringify(demoUser));
+
+                    state.token = demoToken;
+                    state.user = demoUser;
+
+                    showToast('✅ Demo login successful!', 'success');
+                    handleAuthSuccess(demoUser);
+                    return;
+                }
+
+                // NORMAL MODE: REAL API CALL
                 const response = await fetch(`${API_BASE}/api/v1/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (!response.ok) {
                     throw new Error(data.error || 'Login failed');
                 }
-                
+
                 // Store REAL JWT token from backend
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                
+
                 state.token = data.token;
                 state.user = data.user;
-                
+
                 showToast('✅ Login successful!', 'success');
                 handleAuthSuccess(data.user);
-                
+
             } catch (error) {
                 console.error('Login error:', error);
                 errorDiv.textContent = error.message;
