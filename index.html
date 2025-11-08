@@ -171,14 +171,17 @@
         }
 
         :root {
-            --primary: #3b82f6;
-            --secondary: #1e40af;
-            --accent: #60a5fa;
-            --dark: #0f172a;
-            --darker: #020617;
-            --light: #f8fafc;
+            --primary: #00d9ff;
+            --secondary: #0099cc;
+            --accent: #00ffff;
+            --cyan-glow: #00d9ff;
+            --dark: #0a0e1a;
+            --darker: #050811;
+            --light: #f0f4f8;
             --gray: #64748b;
             --text: #1e293b;
+            --hero-gradient-1: #0a0e1a;
+            --hero-gradient-2: #1a1f3a;
         }
 
         body {
@@ -231,10 +234,24 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            background: linear-gradient(135deg, var(--hero-gradient-1) 0%, var(--hero-gradient-2) 100%);
             color: white;
             padding: 6rem 2rem;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .hero-content {
@@ -244,18 +261,23 @@
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
         .hero-text h1 {
             font-size: 3.5rem;
             margin-bottom: 1rem;
             line-height: 1.2;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5),
+                         0 0 40px rgba(0, 217, 255, 0.3);
         }
 
         .hero-text .subtitle {
             font-size: 1.5rem;
             color: var(--accent);
             margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
         .hero-text p {
@@ -272,7 +294,18 @@
             width: 100%;
             max-width: 500px;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.4),
+                        0 20px 60px rgba(0,0,0,0.5),
+                        inset 0 0 20px rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .hero-image img:hover {
+            box-shadow: 0 0 60px rgba(0, 217, 255, 0.6),
+                        0 20px 80px rgba(0,0,0,0.6),
+                        inset 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: scale(1.02);
         }
 
         .cta-buttons {
@@ -295,24 +328,31 @@
 
         .btn-primary {
             background: var(--primary);
-            color: white;
+            color: var(--darker);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+            font-weight: 700;
         }
 
         .btn-primary:hover {
-            background: var(--secondary);
+            background: var(--accent);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6),
+                        0 10px 30px rgba(0, 217, 255, 0.4);
         }
 
         .btn-secondary {
             background: transparent;
-            color: white;
+            color: var(--accent);
             border: 2px solid var(--accent);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
         }
 
         .btn-secondary:hover {
-            background: var(--accent);
+            background: rgba(0, 255, 255, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
             transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
         }
 
         /* Section Styles */
@@ -327,6 +367,19 @@
             text-align: center;
             margin-bottom: 1rem;
             color: var(--dark);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
         }
 
         .section-subtitle {
@@ -390,20 +443,26 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1),
+                        0 0 0 1px rgba(0, 217, 255, 0.1);
             transition: all 0.3s;
+            border: 1px solid transparent;
         }
 
         .project-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15),
+                        0 0 30px rgba(0, 217, 255, 0.3);
+            border-color: rgba(0, 217, 255, 0.5);
         }
 
         .project-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--dark), var(--hero-gradient-2));
             color: white;
             padding: 2rem;
             position: relative;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: inset 0 -2px 20px rgba(0, 217, 255, 0.2);
         }
 
         .project-icon {
@@ -457,15 +516,18 @@
         .project-link {
             padding: 0.75rem 1.5rem;
             background: var(--primary);
-            color: white;
+            color: var(--darker);
             text-decoration: none;
             border-radius: 6px;
             transition: all 0.3s;
             font-weight: 600;
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
         }
 
         .project-link:hover {
-            background: var(--secondary);
+            background: var(--accent);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+            transform: translateY(-2px);
         }
 
         .project-link.secondary {
@@ -651,7 +713,12 @@
                 </div>
             </div>
             <div class="hero-image">
-                <img src="josh-lerner-hero.png" alt="Josh Lerner presenting system architecture">
+                <!--
+                    IMPORTANT: Save your holographic AI image as "josh-lerner-hero.png"
+                    in the same directory as this index.html file.
+                    Recommended: 1200x630px or larger for best quality
+                -->
+                <img src="josh-lerner-hero.png" alt="Josh Lerner with holographic AI interface - Phoenix AI Creator">
             </div>
         </div>
     </section>
