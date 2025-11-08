@@ -130,7 +130,7 @@ Update all your live apps to link back to portfolio:
 <a href="https://joshlerner.dev">Developer Portfolio</a>
 ```
 
-**Coastal Fitness Hub** (footer):
+**Connect Fitness** (footer):
 ```html
 <a href="https://joshlerner.dev">Built by Josh Lerner</a>
 ```
@@ -153,7 +153,7 @@ Each repo needs a professional README with:
 1. Phoenix AI - Your flagship project
 2. ClockWork Hub - Revenue generator
 3. Lightning Pass - Production app
-4. Coastal Fitness Hub - Client work showcase
+4. Connect Fitness - Client work showcase
 
 ### GitHub Profile Enhancement
 
@@ -171,7 +171,7 @@ Building revolutionary AI systems and SaaS platforms that serve thousands of use
 - **Phoenix AI** - Iron Man-inspired life OS with voice AI
 - **ClockWork Hub** - $299 alternative to $10k/year business tools
 - **Lightning Pass** - Event ticketing infrastructure
-- **Coastal Fitness Hub** - Wellness platform for trainers
+- **Connect Fitness** - Wellness platform for trainers
 
 ## 📚 Published Author
 
@@ -187,7 +187,7 @@ Portfolio: https://joshlerner.dev
 
 1. Go to your GitHub profile
 2. Click "Customize your pins"
-3. Select: Phoenix AI, ClockWork Hub, Lightning Pass, Coastal Fitness
+3. Select: Phoenix AI, ClockWork Hub, Lightning Pass, Connect Fitness
 4. Add topics/tags to each repo
 
 ---
