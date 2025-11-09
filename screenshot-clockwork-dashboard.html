@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ClockWork Dashboard Screenshot</title>
+    <script>
+        // Pre-set localStorage with demo credentials
+        localStorage.setItem('token', 'demo-token-clockwork-' + Date.now());
+        localStorage.setItem('user', JSON.stringify({
+            _id: 'demo-user-456',
+            name: 'Demo User',
+            email: 'demo@clockwork.com',
+            roles: ['specialist', 'admin'],
+            createdAt: new Date().toISOString()
+        }));
+
+        // Redirect to demo
+        window.location.href = 'demos/clockwork-demo.html';
+    </script>
+</head>
+<body>
+    <p>Loading dashboard...</p>
+</body>
+</html>

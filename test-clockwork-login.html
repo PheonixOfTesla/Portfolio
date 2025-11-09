@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auto Login Test - ClockWork</title>
+</head>
+<body>
+    <iframe id="demo" src="demos/clockwork-demo.html" style="width: 100vw; height: 100vh; border: none;"></iframe>
+    <script>
+        setTimeout(() => {
+            const iframe = document.getElementById('demo');
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            // Fill in credentials
+            const emailInput = iframeDoc.getElementById('loginEmail');
+            const passwordInput = iframeDoc.getElementById('loginPassword');
+
+            if (emailInput && passwordInput) {
+                emailInput.value = 'demo@clockwork.com';
+                passwordInput.value = 'demo123';
+
+                // Submit form
+                const form = emailInput.closest('form');
+                if (form) {
+                    setTimeout(() => form.submit(), 500);
+                }
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
