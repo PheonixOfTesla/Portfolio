@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phoenix Consciousness - Voice-Powered Life Assistant</title>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #000000;
+            color: #00d9ff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(0, 150, 255, 0.1) 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Scanlines effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 217, 255, 0.03) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 217, 255, 0.03) 3px
+            );
+            pointer-events: none;
+            z-index: 1;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.8));
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(0, 217, 255, 0.6),
+                           0 0 40px rgba(0, 217, 255, 0.4),
+                           0 0 60px rgba(0, 217, 255, 0.2),
+                           inset 0 0 20px rgba(0, 217, 255, 0.1);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(0, 217, 255, 0.8),
+                           0 0 60px rgba(0, 217, 255, 0.6),
+                           0 0 90px rgba(0, 217, 255, 0.4),
+                           inset 0 0 30px rgba(0, 217, 255, 0.2);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .widget {
+            background: linear-gradient(135deg, rgba(0, 30, 60, 0.4) 0%, rgba(0, 50, 100, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 217, 255, 0.4);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 8px 32px rgba(0, 217, 255, 0.2),
+                inset 0 1px 0 rgba(0, 217, 255, 0.2);
+        }
+
+        .widget::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(0, 217, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: hologramSweep 3s linear infinite;
+        }
+
+        @keyframes hologramSweep {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .widget:hover {
+            border-color: rgba(0, 217, 255, 1);
+            transform: translateY(-4px);
+            box-shadow:
+                0 12px 48px rgba(0, 217, 255, 0.4),
+                inset 0 1px 0 rgba(0, 217, 255, 0.4);
+        }
+
+        .coming-soon-badge {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.3) 0%, rgba(247, 147, 30, 0.3) 100%);
+            border: 1px solid rgba(255, 107, 53, 0.6);
+            color: #ff8c42;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 0.5rem;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .voice-wave {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 40px;
+        }
+
+        .voice-wave span {
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #00d9ff 0%, #0096ff 100%);
+            border-radius: 2px;
+            animation: wave 1.2s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+        }
+
+        .voice-wave span:nth-child(1) { animation-delay: 0s; }
+        .voice-wave span:nth-child(2) { animation-delay: 0.1s; }
+        .voice-wave span:nth-child(3) { animation-delay: 0.2s; }
+        .voice-wave span:nth-child(4) { animation-delay: 0.3s; }
+        .voice-wave span:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes wave {
+            0%, 100% {
+                height: 20px;
+                opacity: 0.6;
+            }
+            50% {
+                height: 40px;
+                opacity: 1;
+            }
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 150, 255, 0.1) 100%);
+            border-left: 3px solid #00d9ff;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 217, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .hologram-orb {
+            position: relative;
+            z-index: 10;
+        }
+
+        .data-stream {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(180deg, transparent, #00d9ff, transparent);
+            animation: dataFlow 2s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes dataFlow {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const PhoenixDemo = () => {
+            const [activeWidget, setActiveWidget] = useState(0);
+            const [listening, setListening] = useState(false);
+            const [currentTime, setCurrentTime] = useState(new Date());
+
+            useEffect(() => {
+                const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+                const widgetTimer = setInterval(() => {
+                    setActiveWidget(prev => (prev + 1) % 4);
+                }, 5000);
+
+                return () => {
+                    clearInterval(timer);
+                    clearInterval(widgetTimer);
+                };
+            }, []);
+
+            const widgets = [
+                {
+                    icon: '🗓️',
+                    title: 'Calendar & Scheduling',
+                    content: (
+                        <div className="space-y-3 relative z-10">
+                            <div className="flex items-center justify-between p-3 rounded-lg border border-cyan-500 border-opacity-40" style={{
+                                background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 150, 255, 0.05) 100%)',
+                                boxShadow: '0 4px 16px rgba(0, 217, 255, 0.1)'
+                            }}>
+                                <div>
+                                    <p className="font-semibold text-cyan-300">Team Standup</p>
+                                    <p className="text-sm text-cyan-500">9:00 AM - 9:30 AM</p>
+                                </div>
+                                <i className="fas fa-video text-cyan-400" style={{textShadow: '0 0 10px rgba(0, 217, 255, 0.8)'}}></i>
+                            </div>
+                            <div className="flex items-center justify-between p-3 rounded-lg border border-cyan-500 border-opacity-40" style={{
+                                background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 150, 255, 0.05) 100%)',
+                                boxShadow: '0 4px 16px rgba(0, 217, 255, 0.1)'
+                            }}>
+                                <div>
+                                    <p className="font-semibold text-cyan-300">Client Review</p>
+                                    <p className="text-sm text-cyan-500">2:00 PM - 3:00 PM</p>
+                                </div>
+                                <i className="fas fa-users text-cyan-400" style={{textShadow: '0 0 10px rgba(0, 217, 255, 0.8)'}}></i>
+                            </div>
+                            <p className="text-xs text-center text-cyan-400 mt-4">
+                                <i className="fas fa-microphone mr-1"></i> "What's on my calendar today?"
+                            </p>
+                        </div>
+                    )
+                },
+                {
+                    icon: '❤️',
+                    title: 'Health & Biometrics',
+                    content: (
+                        <div className="space-y-3 relative z-10">
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="stat-card">
+                                    <p className="text-sm text-cyan-500">Heart Rate</p>
+                                    <p className="text-2xl font-bold text-cyan-300">72 <span className="text-sm">bpm</span></p>
+                                </div>
+                                <div className="stat-card">
+                                    <p className="text-sm text-cyan-500">Sleep</p>
+                                    <p className="text-2xl font-bold text-cyan-300">7.5 <span className="text-sm">hrs</span></p>
+                                </div>
+                                <div className="stat-card">
+                                    <p className="text-sm text-cyan-500">Steps</p>
+                                    <p className="text-2xl font-bold text-cyan-300">8.2k</p>
+                                </div>
+                                <div className="stat-card">
+                                    <p className="text-sm text-cyan-500">Calories</p>
+                                    <p className="text-2xl font-bold text-cyan-300">1,847</p>
+                                </div>
+                            </div>
+                            <p className="text-xs text-center text-cyan-400 mt-4">
+                                <i className="fas fa-microphone mr-1"></i> "How am I doing today?"
+                            </p>
+                        </div>
+                    )
+                },
+                {
+                    icon: '✅',
+                    title: 'Tasks & Reminders',
+                    content: (
+                        <div className="space-y-3 relative z-10">
+                            <div className="flex items-center gap-3 p-2 border-l-2 border-cyan-500 pl-3">
+                                <input type="checkbox" className="w-5 h-5 accent-cyan-400" />
+                                <span className="text-cyan-200">Review Q4 analytics report</span>
+                            </div>
+                            <div className="flex items-center gap-3 p-2 border-l-2 border-cyan-500 pl-3">
+                                <input type="checkbox" className="w-5 h-5 accent-cyan-400" />
+                                <span className="text-cyan-200">Call dentist for appointment</span>
+                            </div>
+                            <div className="flex items-center gap-3 p-2 border-l-2 border-cyan-500 pl-3">
+                                <input type="checkbox" className="w-5 h-5 accent-cyan-400" />
+                                <span className="text-cyan-200">Update project documentation</span>
+                            </div>
+                            <div className="flex items-center gap-3 p-2 border-l-2 border-cyan-700 pl-3 opacity-50">
+                                <input type="checkbox" className="w-5 h-5 accent-cyan-400" checked />
+                                <span className="line-through text-cyan-600">Morning workout</span>
+                            </div>
+                            <p className="text-xs text-center text-cyan-400 mt-4">
+                                <i className="fas fa-microphone mr-1"></i> "Add task: buy groceries"
+                            </p>
+                        </div>
+                    )
+                },
+                {
+                    icon: '🎤',
+                    title: 'Voice Commands',
+                    content: (
+                        <div className="space-y-4 relative z-10">
+                            <div className="text-center">
+                                <div className="voice-wave mb-4">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <p className="text-lg mb-2 text-cyan-200">"Set timer for 25 minutes"</p>
+                                <p className="text-sm text-cyan-400">
+                                    <i className="fas fa-check-circle mr-1"></i> Timer started
+                                </p>
+                            </div>
+                            <div className="p-3 rounded-lg border border-cyan-500 border-opacity-30" style={{
+                                background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 150, 255, 0.05) 100%)'
+                            }}>
+                                <p className="text-xs text-cyan-500 mb-2">Try saying:</p>
+                                <ul className="text-sm space-y-1 text-cyan-300">
+                                    <li>• "What's the weather today?"</li>
+                                    <li>• "Schedule a meeting at 3pm"</li>
+                                    <li>• "Show my health stats"</li>
+                                    <li>• "Read my messages"</li>
+                                </ul>
+                            </div>
+                        </div>
+                    )
+                }
+            ];
+
+            return (
+                <div className="min-h-screen p-8" style={{position: 'relative', zIndex: 10}}>
+                    {/* Header */}
+                    <div className="max-w-6xl mx-auto mb-12">
+                        <div className="text-center mb-8">
+                            <div className="inline-block mb-4 hologram-orb">
+                                <div className="w-24 h-24 mx-auto rounded-full flex items-center justify-center text-5xl glow" style={{
+                                    background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.3) 0%, rgba(0, 150, 255, 0.2) 100%)',
+                                    border: '2px solid rgba(0, 217, 255, 0.6)'
+                                }}>
+                                    🔮
+                                </div>
+                            </div>
+                            <h1 className="text-5xl font-bold mb-3 bg-gradient-to-r from-cyan-400 to-blue-300 bg-clip-text text-transparent" style={{
+                                textShadow: '0 0 40px rgba(0, 217, 255, 0.5)'
+                            }}>
+                                Phoenix Consciousness
+                            </h1>
+                            <p className="text-xl text-cyan-400 mb-4" style={{textShadow: '0 0 20px rgba(0, 217, 255, 0.3)'}}>
+                                Voice-Powered Life Management System
+                            </p>
+
+                            <div className="flex items-center justify-center gap-3 text-sm">
+                                <span className="coming-soon-badge">
+                                    <i className="fas fa-rocket mr-1"></i> COMING SOON
+                                </span>
+                                <span className="text-cyan-700">•</span>
+                                <span className="text-cyan-500">Demo Preview</span>
+                            </div>
+                        </div>
+
+                        {/* Main Widget Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            {widgets.map((widget, index) => (
+                                <div
+                                    key={index}
+                                    className={`widget ${activeWidget === index ? 'ring-2 ring-cyan-400' : ''}`}
+                                    onClick={() => setActiveWidget(index)}
+                                    style={{cursor: 'pointer'}}
+                                >
+                                    <div className="flex items-center justify-between mb-4 relative z-10">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-3xl" style={{filter: 'drop-shadow(0 0 10px rgba(0, 217, 255, 0.5))'}}>{widget.icon}</span>
+                                            <h3 className="text-xl font-semibold text-cyan-300">{widget.title}</h3>
+                                        </div>
+                                        {index > 0 && (
+                                            <span className="text-xs px-2 py-1 rounded border border-cyan-500 text-cyan-400" style={{
+                                                background: 'rgba(0, 217, 255, 0.1)'
+                                            }}>
+                                                Coming Soon
+                                            </span>
+                                        )}
+                                    </div>
+                                    {widget.content}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Voice Activation */}
+                        <div className="widget text-center">
+                            <button
+                                className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 glow transition-transform hover:scale-110"
+                                onClick={() => setListening(!listening)}
+                                style={{
+                                    background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.3) 0%, rgba(0, 150, 255, 0.2) 100%)',
+                                    border: '2px solid rgba(0, 217, 255, 0.6)'
+                                }}
+                            >
+                                <i className={`fas fa-microphone text-3xl text-cyan-300 ${listening ? 'pulse' : ''}`}></i>
+                            </button>
+                            <p className="text-lg mb-2 text-cyan-300">
+                                {listening ? 'Listening...' : 'Press to speak'}
+                            </p>
+                            <p className="text-sm text-cyan-500">
+                                Voice activation will be available in the full release
+                            </p>
+                        </div>
+
+                        {/* Features Overview */}
+                        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="text-center p-6">
+                                <div className="text-4xl mb-3" style={{filter: 'drop-shadow(0 0 15px rgba(0, 217, 255, 0.5))'}}>🧠</div>
+                                <h4 className="font-semibold mb-2 text-cyan-300">Intelligent Processing</h4>
+                                <p className="text-sm text-cyan-500">
+                                    Natural language understanding for intuitive interactions
+                                </p>
+                            </div>
+                            <div className="text-center p-6">
+                                <div className="text-4xl mb-3" style={{filter: 'drop-shadow(0 0 15px rgba(0, 217, 255, 0.5))'}}>⌚</div>
+                                <h4 className="font-semibold mb-2 text-cyan-300">Biometric Integration</h4>
+                                <p className="text-sm text-cyan-500">
+                                    Real-time health tracking and wellness insights
+                                </p>
+                            </div>
+                            <div className="text-center p-6">
+                                <div className="text-4xl mb-3" style={{filter: 'drop-shadow(0 0 15px rgba(0, 217, 255, 0.5))'}}>🔗</div>
+                                <h4 className="font-semibold mb-2 text-cyan-300">Universal Connectivity</h4>
+                                <p className="text-sm text-cyan-500">
+                                    Seamless integration with your digital ecosystem
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Demo Notice */}
+                        <div className="mt-12 text-center p-6 rounded-lg border-2 border-cyan-500 border-opacity-40" style={{
+                            background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(0, 150, 255, 0.05) 100%)',
+                            boxShadow: '0 8px 32px rgba(0, 217, 255, 0.2)'
+                        }}>
+                            <i className="fas fa-info-circle text-3xl text-cyan-400 mb-3" style={{filter: 'drop-shadow(0 0 20px rgba(0, 217, 255, 0.8))'}}></i>
+                            <p className="text-lg mb-2 text-cyan-300">This is a preview demonstration</p>
+                            <p className="text-sm text-cyan-500">
+                                Phoenix Consciousness is currently in development. Full functionality including voice activation,
+                                biometric integration, and intelligent insights will be available soon.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<PhoenixDemo />, document.getElementById('root'));
+    </script>
+</body>
+</html>

@@ -470,9 +470,307 @@ const DateHandler = {
         'Content-Type': 'application/json',
         'Authorization': localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : ''
     }),
-    
+
+    async getMockData(endpoint, options = {}) {
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Mock Clients/Users
+        if (endpoint.includes('/users') && endpoint.includes('role=client')) {
+            return [
+                {
+                    _id: 'client-001',
+                    name: 'Sarah Johnson',
+                    email: 'sarah.j@email.com',
+                    roles: ['client'],
+                    age: 32,
+                    goals: 'Weight loss, strength training',
+                    memberSince: '2024-01-15',
+                    lastActivity: '2024-11-07'
+                },
+                {
+                    _id: 'client-002',
+                    name: 'Mike Chen',
+                    email: 'mike.chen@email.com',
+                    roles: ['client'],
+                    age: 28,
+                    goals: 'Muscle gain, athletic performance',
+                    memberSince: '2024-03-22',
+                    lastActivity: '2024-11-08'
+                },
+                {
+                    _id: 'client-003',
+                    name: 'Emily Rodriguez',
+                    email: 'emily.r@email.com',
+                    roles: ['client'],
+                    age: 45,
+                    goals: 'Flexibility, stress reduction',
+                    memberSince: '2023-11-10',
+                    lastActivity: '2024-11-06'
+                },
+                {
+                    _id: 'client-004',
+                    name: 'David Thompson',
+                    email: 'david.t@email.com',
+                    roles: ['client'],
+                    age: 38,
+                    goals: 'Marathon training, endurance',
+                    memberSince: '2024-02-01',
+                    lastActivity: '2024-11-08'
+                },
+                {
+                    _id: 'client-005',
+                    name: 'Lisa Martinez',
+                    email: 'lisa.m@email.com',
+                    roles: ['client'],
+                    age: 29,
+                    goals: 'Toning, nutrition improvement',
+                    memberSince: '2024-04-18',
+                    lastActivity: '2024-11-07'
+                }
+            ];
+        }
+
+        // Mock Workouts
+        if (endpoint.includes('/workouts')) {
+            const mockWorkouts = [
+                {
+                    _id: 'workout-001',
+                    name: 'Upper Body Strength',
+                    clientId: 'client-001',
+                    clientName: 'Sarah Johnson',
+                    scheduledDate: '2024-11-08',
+                    type: 'Strength Training',
+                    exercises: [
+                        { name: 'Squats', sets: 4, reps: 12, weight: 135, notes: 'Focus on depth' },
+                        { name: 'Bench Press', sets: 3, reps: 10, weight: 95, notes: 'Chest to bar' },
+                        { name: 'Deadlifts', sets: 3, reps: 8, weight: 185, notes: 'Keep back straight' }
+                    ],
+                    duration: 60,
+                    caloriesBurned: 350,
+                    notes: 'Great session, increased squat weight',
+                    completed: false
+                },
+                {
+                    _id: 'workout-002',
+                    name: 'Hypertrophy Focus',
+                    clientId: 'client-002',
+                    clientName: 'Mike Chen',
+                    scheduledDate: '2024-11-08',
+                    type: 'Hypertrophy',
+                    exercises: [
+                        { name: 'Incline DB Press', sets: 4, reps: 10, weight: 70, notes: '45° angle' },
+                        { name: 'Pull-ups', sets: 4, reps: 12, weight: 0, notes: 'Full range of motion' },
+                        { name: 'Leg Press', sets: 4, reps: 15, weight: 360, notes: '90° knee angle' }
+                    ],
+                    duration: 75,
+                    caloriesBurned: 420,
+                    notes: 'Added extra set for pull-ups',
+                    completed: false
+                },
+                {
+                    _id: 'workout-003',
+                    name: 'Cardio & Core',
+                    clientId: 'client-004',
+                    clientName: 'David Thompson',
+                    scheduledDate: '2024-11-07',
+                    type: 'Cardio',
+                    exercises: [
+                        { name: 'Running', sets: 1, reps: 1, distance: '8 miles', notes: 'Marathon prep' },
+                        { name: 'Core Circuit', sets: 3, reps: 20, weight: 0, notes: 'Planks + crunches' }
+                    ],
+                    duration: 55,
+                    caloriesBurned: 680,
+                    notes: 'Long run, felt strong',
+                    completed: false
+                }
+            ];
+
+            // Check if requesting a specific workout by ID
+            const workoutIdMatch = endpoint.match(/\/workouts\/([a-z0-9\-]+)/i);
+            if (workoutIdMatch && workoutIdMatch[1]) {
+                const workoutId = workoutIdMatch[1];
+                const workout = mockWorkouts.find(w => w._id === workoutId);
+                return workout || mockWorkouts[0]; // Return first workout as fallback
+            }
+
+            // Return all workouts
+            return mockWorkouts;
+        }
+
+        // Mock Nutrition/Meals
+        if (endpoint.includes('/nutrition') || endpoint.includes('/meals')) {
+            return [
+                {
+                    _id: 'meal-001',
+                    clientId: 'client-001',
+                    clientName: 'Sarah Johnson',
+                    date: '2024-11-08',
+                    mealType: 'Breakfast',
+                    foods: [
+                        { name: 'Oatmeal with berries', calories: 320, protein: 12, carbs: 54, fat: 8 },
+                        { name: 'Greek yogurt', calories: 140, protein: 20, carbs: 10, fat: 4 }
+                    ],
+                    totalCalories: 460,
+                    totalProtein: 32,
+                    totalCarbs: 64,
+                    totalFat: 12
+                },
+                {
+                    _id: 'meal-002',
+                    clientId: 'client-002',
+                    clientName: 'Mike Chen',
+                    date: '2024-11-08',
+                    mealType: 'Post-Workout',
+                    foods: [
+                        { name: 'Chicken breast', calories: 280, protein: 52, carbs: 0, fat: 6 },
+                        { name: 'Sweet potato', calories: 180, protein: 4, carbs: 41, fat: 0 },
+                        { name: 'Broccoli', calories: 50, protein: 4, carbs: 10, fat: 0 }
+                    ],
+                    totalCalories: 510,
+                    totalProtein: 60,
+                    totalCarbs: 51,
+                    totalFat: 6
+                }
+            ];
+        }
+
+        // Mock Measurements
+        if (endpoint.includes('/measurements')) {
+            return [
+                {
+                    _id: 'measure-001',
+                    clientId: 'client-001',
+                    date: '2024-11-08',
+                    weight: 152,
+                    bodyFat: 24.5,
+                    chest: 36,
+                    waist: 29,
+                    hips: 38,
+                    arms: 12,
+                    thighs: 22
+                },
+                {
+                    _id: 'measure-002',
+                    clientId: 'client-002',
+                    date: '2024-11-08',
+                    weight: 185,
+                    bodyFat: 15.2,
+                    chest: 42,
+                    waist: 32,
+                    hips: 38,
+                    arms: 15,
+                    thighs: 24
+                }
+            ];
+        }
+
+        // Mock Goals
+        if (endpoint.includes('/goals')) {
+            return [
+                {
+                    _id: 'goal-001',
+                    clientId: 'client-001',
+                    goal: 'Lose 15 lbs',
+                    targetDate: '2025-03-01',
+                    progress: 60,
+                    status: 'On Track'
+                },
+                {
+                    _id: 'goal-002',
+                    clientId: 'client-002',
+                    goal: 'Bench 225 lbs',
+                    targetDate: '2025-01-15',
+                    progress: 75,
+                    status: 'Ahead of Schedule'
+                },
+                {
+                    _id: 'goal-003',
+                    clientId: 'client-004',
+                    goal: 'Run sub-3:30 marathon',
+                    targetDate: '2025-04-20',
+                    progress: 45,
+                    status: 'On Track'
+                }
+            ];
+        }
+
+        // Mock Messages
+        if (endpoint.includes('/messages')) {
+            return [
+                {
+                    _id: 'msg-001',
+                    from: 'Sarah Johnson',
+                    subject: 'Question about meal plan',
+                    preview: 'Hi! I wanted to ask about substituting...',
+                    date: '2024-11-08',
+                    unread: true
+                },
+                {
+                    _id: 'msg-002',
+                    from: 'Mike Chen',
+                    subject: 'Great workout today!',
+                    preview: 'Thanks for the new program, really feeling it...',
+                    date: '2024-11-07',
+                    unread: false
+                }
+            ];
+        }
+
+        // Mock Exercise Library
+        if (endpoint.includes('/exercises')) {
+            return [
+                {
+                    _id: 'ex-001',
+                    name: 'Squats',
+                    muscleCategory: 'Legs',
+                    secondaryMuscles: ['Core', 'Glutes'],
+                    difficulty: 'intermediate',
+                    equipmentNeeded: 'Barbell',
+                    description: 'Compound lower body exercise targeting quads, glutes, and hamstrings',
+                    instructions: ['Stand with feet shoulder-width apart', 'Lower hips back and down', 'Keep chest up and knees tracking over toes', 'Drive through heels to stand'],
+                    tips: ['Keep core engaged throughout', 'Maintain neutral spine', 'Focus on proper depth'],
+                    commonMistakes: ['Knees caving inward', 'Rising onto toes', 'Rounding lower back']
+                },
+                {
+                    _id: 'ex-002',
+                    name: 'Bench Press',
+                    muscleCategory: 'Chest',
+                    secondaryMuscles: ['Triceps', 'Shoulders'],
+                    difficulty: 'intermediate',
+                    equipmentNeeded: 'Barbell, Bench',
+                    description: 'Upper body pressing movement for chest development',
+                    instructions: ['Lie flat on bench', 'Grip bar slightly wider than shoulders', 'Lower bar to mid-chest', 'Press explosively to lockout'],
+                    tips: ['Keep feet planted', 'Maintain slight arch in back', 'Control the descent'],
+                    commonMistakes: ['Bouncing off chest', 'Flaring elbows too wide', 'Not touching chest']
+                },
+                {
+                    _id: 'ex-003',
+                    name: 'Deadlifts',
+                    muscleCategory: 'Back',
+                    secondaryMuscles: ['Legs', 'Core'],
+                    difficulty: 'advanced',
+                    equipmentNeeded: 'Barbell',
+                    description: 'Full body compound movement emphasizing posterior chain',
+                    instructions: ['Stand with feet hip-width', 'Grip bar outside legs', 'Keep back straight, chest up', 'Drive through heels to lift', 'Reverse motion under control'],
+                    tips: ['Engage lats before lift', 'Keep bar close to body', 'Think "push the floor away"'],
+                    commonMistakes: ['Rounding back', 'Hyperextending at top', 'Starting with hips too low']
+                }
+            ];
+        }
+
+        // Default: return empty array
+        return [];
+    },
+
     async request(endpoint, options = {}) {
         try {
+            // DEMO MODE: Return mock data if using demo token
+            const token = localStorage.getItem('token');
+            if (token && token.startsWith('demo-token-clockwork-')) {
+                return await this.getMockData(endpoint, options);
+            }
+
             const response = await fetch(`${this.baseURL}${endpoint}`, {
                 ...options,
                 headers: {
@@ -746,7 +1044,17 @@ const [success, setSuccess] = useState(null);
             setLoading(false);
             return;
         }
-        
+
+        // Check if this is a demo token - if so, load user from localStorage instead of API
+        if (token.startsWith('demo-token-clockwork-')) {
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                setUser(JSON.parse(savedUser));
+            }
+            setLoading(false);
+            return;
+        }
+
         // Direct fetch with explicit headers
         const response = await fetch(`${API_CONFIG.baseURL}/users/profile`, {
             method: 'GET',
@@ -4138,12 +4446,12 @@ const ExerciseLibrary = ({ user, showError, showSuccess }) => {
                             <label className="block text-sm font-medium mb-2">Secondary Muscles</label>
                             <div className="flex flex-wrap gap-2">
                                 {muscleCategories.filter(m => m !== formData.muscleCategory).map(muscle => (
-                                    <label 
+                                    <label
                                         key={muscle}
                                         className={`flex items-center px-3 py-1 rounded cursor-pointer ${
-                                            formData.secondaryMuscles.includes(muscle) 
-                                                ? 'bg-blue-100 text-blue-700' 
-                                                : 'bg-gray-100 hover:bg-gray-200'
+                                            formData.secondaryMuscles.includes(muscle)
+                                                ? 'bg-blue-600 text-white'
+                                                : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
                                         }`}
                                     >
                                         <input
@@ -5930,13 +6238,9 @@ const handleSync = async (provider) => {
                 <div className="text-center">
                     <div className="text-4xl mb-2">{provider.icon}</div>
                     <h3 className="font-semibold text-white">{provider.name}</h3>
-                    {isAvailable ? (
-                        <span className="text-xs text-green-400 block mt-1 font-semibold">
-                            <i className="fas fa-check-circle mr-1"></i>Active
-                        </span>
-                    ) : (
-                        <span className="text-xs text-yellow-400 block mt-1">Coming Soon</span>
-                    )}
+                    <span className="text-xs text-purple-400 block mt-1 font-semibold">
+                        <i className="fas fa-flask mr-1"></i>DEMO
+                    </span>
                    {isAvailable && (
     connected ? (
         <div className="flex flex-col gap-2 mt-2">

@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Jay C. - Full-Stack Software Engineer, Author, and AI Innovator based in Sarasota, FL. Creator of Phoenix AI, ClockWork Hub, and Lightning Pass.">
-    <meta name="keywords" content="Jay C., Software Engineer, Sarasota, Full-Stack Developer, AI, Phoenix AI, ClockWork, JavaScript, React, Node.js">
+    <meta name="description" content="Jay C. - Full-Stack Software Engineer, Author, and Innovator based in Sarasota, FL. Creator of Phoenix Consciousness, ClockWork Hub, and Lightning Pass.">
+    <meta name="keywords" content="Jay C., Software Engineer, Sarasota, Full-Stack Developer, Phoenix Consciousness, ClockWork, JavaScript, React, Node.js">
     <meta name="author" content="Jay C.">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://jayc.dev/">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Jay C. - Software Engineer & AI Innovator">
-    <meta property="og:description" content="Full-Stack Developer building revolutionary AI systems and SaaS platforms. Author of health & wellness books.">
+    <meta property="og:title" content="Jay C. - Software Engineer & Innovator">
+    <meta property="og:description" content="Full-Stack Developer building revolutionary voice-powered systems and SaaS platforms. Author of health & wellness books.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://jayc.dev/">
     <meta property="og:image" content="https://jayc.dev/jayc-og-image.png">
@@ -23,8 +23,8 @@
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Jay C. - Software Engineer & AI Innovator">
-    <meta name="twitter:description" content="Full-Stack Developer building revolutionary AI systems and SaaS platforms. Creator of Phoenix AI, ClockWork Hub, and more.">
+    <meta name="twitter:title" content="Jay C. - Software Engineer & Innovator">
+    <meta name="twitter:description" content="Full-Stack Developer building revolutionary voice-powered systems and SaaS platforms. Creator of Phoenix Consciousness, ClockWork Hub, and more.">
     <meta name="twitter:image" content="https://jayc.dev/jayc-og-image.png">
 
     <!-- Google Search Console Verification (Replace with your actual verification code) -->
@@ -36,7 +36,7 @@
     <meta name="language" content="English">
     <meta name="revisit-after" content="7 days">
 
-    <title>Jay C. - Software Engineer & AI Innovator | Sarasota, FL</title>
+    <title>Jay C. - Software Engineer & Innovator | Sarasota, FL</title>
 
     <!-- Google Analytics (Replace with your actual GA4 Measurement ID) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -55,7 +55,7 @@
         "name": "Jay C.",
         "url": "https://jayc.dev",
         "image": "https://jayc.dev/jayc-hero.png",
-        "jobTitle": "Software Engineer & AI Innovator",
+        "jobTitle": "Software Engineer & Innovator",
         "worksFor": {
             "@type": "Organization",
             "name": "Independent Developer"
@@ -69,7 +69,7 @@
         },
         "sameAs": [
             "https://github.com/PheonixOfTesla",
-            "https://www.linkedin.com/in/josh-lerner",
+            "https://www.linkedin.com/in/josh-lerner-210b29160/",
             "https://www.instagram.com/jcmb2.0",
             "https://lift.bio/clockwork"
         ],
@@ -92,8 +92,8 @@
     {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        "name": "Phoenix AI",
-        "description": "Iron Man-inspired AI life operating system managing health, fitness, goals, and finances through 7 planetary systems with ChatGPT-level conversational intelligence.",
+        "name": "Phoenix Consciousness",
+        "description": "Voice-powered life management system integrating health tracking, fitness monitoring, goal management, and financial planning through an intelligent conversational interface with biometric integration.",
         "applicationCategory": "LifestyleApplication",
         "operatingSystem": "Web",
         "offers": {
@@ -105,7 +105,7 @@
             "@type": "Person",
             "name": "Jay C."
         },
-        "url": "https://pheonixoftesla.github.io/phoenix-fe/",
+        "url": "https://jayc.dev/demos/phoenix-demo.html",
         "screenshot": "https://jayc.dev/phoenix-screenshot.png"
     }
     </script>
@@ -172,29 +172,80 @@
 
         :root {
             --primary: #00d9ff;
-            --secondary: #0099cc;
+            --secondary: #0096ff;
             --accent: #00ffff;
             --cyan-glow: #00d9ff;
-            --dark: #0a0e1a;
-            --darker: #050811;
-            --light: #f0f4f8;
-            --gray: #64748b;
-            --text: #1e293b;
-            --hero-gradient-1: #0a0e1a;
-            --hero-gradient-2: #1a1f3a;
+            --dark: #000000;
+            --darker: #000000;
+            --light: #00d9ff;
+            --gray: #0096ff;
+            --text: #00d9ff;
+            --hero-gradient-1: #000000;
+            --hero-gradient-2: #000000;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             line-height: 1.6;
             color: var(--text);
-            background: var(--light);
+            background: #000000;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Holographic background effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(0, 150, 255, 0.1) 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Scanlines effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 217, 255, 0.03) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 217, 255, 0.03) 3px
+            );
+            pointer-events: none;
+            z-index: 1;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
         }
 
         /* Header */
         header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, rgba(0, 30, 60, 0.4) 0%, rgba(0, 50, 100, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 217, 255, 0.2);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -207,12 +258,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 10;
         }
 
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--primary);
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
         }
 
         .nav-links {
@@ -222,24 +276,27 @@
         }
 
         .nav-links a {
-            color: var(--text);
+            color: #00d9ff;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
         }
 
         .nav-links a:hover {
-            color: var(--primary);
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 1);
         }
 
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--hero-gradient-1) 0%, var(--hero-gradient-2) 100%);
-            color: white;
+            color: #00d9ff;
             padding: 6rem 2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
 
         .hero::before {
@@ -249,8 +306,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(0, 255, 255, 0.2) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -283,7 +340,7 @@
         .hero-text p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
-            color: #cbd5e1;
+            color: #66d9ff;
         }
 
         .hero-image {
@@ -360,14 +417,17 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 6rem 2rem;
+            position: relative;
+            z-index: 10;
         }
 
         .section-title {
             font-size: 2.5rem;
             text-align: center;
             margin-bottom: 1rem;
-            color: var(--dark);
+            color: #00d9ff;
             position: relative;
+            text-shadow: 0 0 30px rgba(0, 217, 255, 0.6);
         }
 
         .section-title::after {
@@ -379,13 +439,13 @@
             width: 80px;
             height: 3px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
         }
 
         .section-subtitle {
             text-align: center;
             font-size: 1.2rem;
-            color: var(--gray);
+            color: #66d9ff;
             margin-bottom: 4rem;
         }
 
@@ -408,7 +468,7 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 2rem;
             margin-top: 2rem;
         }
@@ -416,20 +476,44 @@
         .stat {
             text-align: center;
             padding: 1.5rem;
-            background: white;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 150, 255, 0.1) 100%);
+            border-left: 3px solid #00d9ff;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 16px rgba(0, 217, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         .stat-number {
             font-size: 2.5rem;
             font-weight: bold;
-            color: var(--primary);
+            color: #00d9ff;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.6);
+            position: relative;
+            z-index: 1;
         }
 
         .stat-label {
-            color: var(--gray);
+            color: #66d9ff;
             margin-top: 0.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         /* Projects Grid */
@@ -440,53 +524,83 @@
         }
 
         .project-card {
-            background: white;
+            background: linear-gradient(135deg, rgba(0, 30, 60, 0.4) 0%, rgba(0, 50, 100, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 217, 255, 0.4);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1),
-                        0 0 0 1px rgba(0, 217, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 217, 255, 0.2),
+                        inset 0 1px 0 rgba(0, 217, 255, 0.2);
             transition: all 0.3s;
-            border: 1px solid transparent;
+            position: relative;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(0, 217, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: hologramSweep 3s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes hologramSweep {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .project-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15),
-                        0 0 30px rgba(0, 217, 255, 0.3);
-            border-color: rgba(0, 217, 255, 0.5);
+            border-color: rgba(0, 217, 255, 1);
+            box-shadow: 0 12px 48px rgba(0, 217, 255, 0.4),
+                        inset 0 1px 0 rgba(0, 217, 255, 0.4);
         }
 
         .project-header {
-            background: linear-gradient(135deg, var(--dark), var(--hero-gradient-2));
-            color: white;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(0, 150, 255, 0.05));
+            color: #00d9ff;
             padding: 2rem;
             position: relative;
             border-bottom: 2px solid var(--primary);
-            box-shadow: inset 0 -2px 20px rgba(0, 217, 255, 0.2);
+            box-shadow: inset 0 -2px 20px rgba(0, 217, 255, 0.3);
+            z-index: 1;
         }
 
         .project-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
+            filter: drop-shadow(0 0 15px rgba(0, 217, 255, 0.6));
         }
 
         .project-header h3 {
             font-size: 1.8rem;
             margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
         }
 
         .project-header .tech-stack {
             font-size: 0.9rem;
-            opacity: 0.9;
+            opacity: 0.8;
+            color: #66d9ff;
         }
 
         .project-body {
             padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .project-body p {
             margin-bottom: 1.5rem;
-            color: var(--gray);
+            color: #66d9ff;
         }
 
         .project-features {
@@ -498,6 +612,7 @@
             padding: 0.5rem 0;
             padding-left: 1.5rem;
             position: relative;
+            color: #66d9ff;
         }
 
         .project-features li:before {
@@ -506,6 +621,7 @@
             left: 0;
             color: var(--primary);
             font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.8);
         }
 
         .project-links {
@@ -549,33 +665,63 @@
         }
 
         .book-card {
-            background: white;
+            background: linear-gradient(135deg, rgba(0, 30, 60, 0.4) 0%, rgba(0, 50, 100, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 217, 255, 0.4);
             border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 217, 255, 0.2);
             text-align: center;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(0, 217, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: hologramSweep 3s linear infinite;
+            z-index: 0;
         }
 
         .book-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border-color: rgba(0, 217, 255, 1);
+            box-shadow: 0 12px 48px rgba(0, 217, 255, 0.4);
         }
 
         .book-icon {
             font-size: 4rem;
             margin-bottom: 1rem;
+            filter: drop-shadow(0 0 15px rgba(0, 217, 255, 0.6));
+            position: relative;
+            z-index: 1;
         }
 
         .book-card h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: var(--dark);
+            color: #00d9ff;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+            position: relative;
+            z-index: 1;
         }
 
         .book-card p {
-            color: var(--gray);
+            color: #66d9ff;
             margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         /* Skills Section */
@@ -633,27 +779,35 @@
             align-items: center;
             gap: 0.5rem;
             padding: 1rem 2rem;
-            background: white;
-            color: var(--text);
+            background: linear-gradient(135deg, rgba(0, 30, 60, 0.4) 0%, rgba(0, 50, 100, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 217, 255, 0.4);
+            color: #00d9ff;
             text-decoration: none;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 217, 255, 0.2);
             transition: all 0.3s;
             font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
         }
 
         .contact-link:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.4);
+            border-color: rgba(0, 217, 255, 1);
+            text-shadow: 0 0 20px rgba(0, 217, 255, 1);
         }
 
         /* Footer */
         footer {
-            background: var(--darker);
-            color: white;
+            background: linear-gradient(135deg, rgba(0, 30, 60, 0.4) 0%, rgba(0, 50, 100, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0, 217, 255, 0.3);
+            color: #00d9ff;
             text-align: center;
             padding: 2rem;
+            position: relative;
+            z-index: 10;
         }
 
         /* Screenshot Carousel */
@@ -810,7 +964,7 @@
         <div class="hero-content">
             <div class="hero-text">
                 <h1>Jay C.</h1>
-                <p class="subtitle">Software Engineer & AI Innovator</p>
+                <p class="subtitle">Software Engineer & Innovator</p>
                 <p>Building revolutionary AI systems and transformative SaaS platforms. Full-stack developer, published author, and health technology advocate based in Sarasota, Florida.</p>
                 <div class="cta-buttons">
                     <a href="#projects" class="btn btn-primary">View Projects</a>
@@ -823,7 +977,7 @@
                     in the same directory as this index.html file.
                     Recommended: 1200x630px or larger for best quality
                 -->
-                <img src="jayc-hero.png" alt="Jay C. with holographic AI interface - Phoenix AI Creator">
+                <img src="jayc-hero.png" alt="Jay C. with holographic interface - Phoenix Consciousness Creator">
             </div>
         </div>
     </section>
@@ -831,15 +985,15 @@
     <!-- About Section -->
     <section id="about">
         <h2 class="section-title">About Me</h2>
-        <p class="section-subtitle">Full-Stack Developer | AI Architect | Published Author</p>
+        <p class="section-subtitle">Full-Stack Developer | Systems Architect | Published Author</p>
         
         <div class="about-content">
             <div class="about-text">
-                <p>I'm a full-stack software engineer specializing in AI-powered applications and scalable SaaS platforms. With expertise spanning front-end design to complex backend architectures, I build products that solve real-world problems.</p>
-                
-                <p>In just 3 months, I've shipped 4 production applications serving thousands of users, including Phoenix AI (an Iron Man-inspired life management system), ClockWork Hub (a universal business platform), and Lightning Pass (event ticketing infrastructure).</p>
-                
-                <p>Beyond software, I'm a published author of health and wellness books, combining my passion for technology with improving people's lives through nutrition science and natural medicine.</p>
+                <p>I build intelligent systems that integrate AI, real-time data processing, and intuitive interfaces to solve complex problems across health, business, and event management domains.</p>
+
+                <p>My work spans the full stack—from architecting 467+ API endpoints and designing scalable backends, to crafting user experiences that make sophisticated technology feel effortless. Current projects include Phoenix Consciousness (voice-powered life management with biometric integration), ClockWork Hub (universal business operations platform), Lightning Pass (event infrastructure with real-time capacity management), and Connect Fitness (comprehensive wellness tracking).</p>
+
+                <p>I'm also developing patent-pending innovations in wearable biotech and human-computer interaction, while contributing to the health and wellness space as a published author on nutrition science and natural medicine.</p>
             </div>
             
             <div class="stats">
@@ -852,8 +1006,12 @@
                     <div class="stat-label">Published Books</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-number">307</div>
+                    <div class="stat-number">467</div>
                     <div class="stat-label">API Endpoints</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Patent-Pending Biotech</div>
                 </div>
             </div>
         </div>
@@ -865,15 +1023,15 @@
         <p class="section-subtitle">Production applications built from concept to deployment</p>
         
         <div class="projects-grid">
-            <!-- Phoenix AI -->
+            <!-- Phoenix Consciousness -->
             <div class="project-card">
                 <div class="project-header">
                     <div class="project-icon">🔥</div>
-                    <h3>Phoenix AI</h3>
-                    <p class="tech-stack">Advanced AI • 3D Visualization • Cloud Infrastructure</p>
+                    <h3>Phoenix Consciousness</h3>
+                    <p class="tech-stack">Voice Interface • 3D Visualization • Cloud Infrastructure</p>
                 </div>
                 <div class="project-body">
-                    <p>Iron Man-inspired AI life operating system managing health, fitness, goals, and finances through 7 planetary systems with intelligent conversational interface.</p>
+                    <p>Voice-powered life management system integrating health tracking, fitness monitoring, goal management, and financial planning through an intelligent conversational interface with biometric integration.</p>
 
                     <!-- Video Demo -->
                     <div class="video-demo" style="margin: 1.5rem 0; border-radius: 8px; overflow: hidden;">
@@ -887,20 +1045,31 @@
                             allowfullscreen
                             style="border-radius: 8px;">
                         </iframe>
-                        <p style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray);">Phoenix AI voice interaction demo</p>
+                        <p style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray);">Phoenix Consciousness voice interaction demo</p>
+                    </div>
+
+                    <!-- Coming Soon Notice -->
+                    <div style="margin: 1.5rem 0; padding: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; border: 1px solid #cbd5e1;">
+                        <p style="text-align: center; font-weight: 600; margin-bottom: 1rem; color: var(--dark);">
+                            <i class="fas fa-rocket" style="color: var(--primary);"></i> Explore Phoenix Consciousness Preview
+                        </p>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                            <a href="demos/phoenix-demo.html" target="_blank" class="clockwork-nav-btn" style="background: var(--primary); color: white; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);">
+                                🔮 Preview Demo
+                            </a>
+                        </div>
+                        <p style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: #64748b;">
+                            <i class="fas fa-info-circle"></i> Full release coming soon with voice activation and biometric integration
+                        </p>
                     </div>
 
                     <ul class="project-features">
-                        <li>Voice AI with wake word detection in 8 languages</li>
-                        <li>Real-time biometric monitoring from multiple wearables</li>
-                        <li>3D holographic planetary visualization</li>
-                        <li>Comprehensive API with cloud-based backend</li>
-                        <li>Sub-2-second AI response times</li>
+                        <li>Natural language voice interface with wake word detection</li>
+                        <li>Real-time biometric monitoring from wearable devices</li>
+                        <li>Comprehensive health, fitness, and wellness tracking</li>
+                        <li>Intelligent task management and scheduling</li>
+                        <li>Cloud-based intelligence with sub-2-second response times</li>
                     </ul>
-                    <div class="project-links">
-                        <a href="https://pheonixoftesla.github.io/phoenix-fe/" class="project-link" target="_blank">Live Demo</a>
-                        <a href="https://github.com/PheonixOfTesla/phoenix-fe" class="project-link secondary" target="_blank">GitHub</a>
-                    </div>
                 </div>
             </div>
 
@@ -914,23 +1083,14 @@
                 <div class="project-body">
                     <p>Universal business platform offering enterprise-level client management for a one-time payment instead of expensive monthly SaaS subscriptions.</p>
 
-                    <!-- ClockWork Screenshots Carousel -->
+                    <!-- ClockWork Screenshot -->
                     <div class="screenshot-carousel">
                         <div class="carousel-container">
-                            <button class="carousel-nav prev">‹</button>
                             <div class="carousel-slides">
                                 <div class="carousel-slide">
                                     <img src="clockwork-dashboard.png" alt="ClockWork Hub - Universal Dashboard" style="width: 100%; height: auto; border-radius: 8px;">
                                 </div>
-                                <div class="carousel-slide">
-                                    <img src="connect-dashboard.png" alt="ClockWork Hub - Fitness Industry Variation" style="width: 100%; height: auto; border-radius: 8px;">
-                                </div>
                             </div>
-                            <button class="carousel-nav next">›</button>
-                        </div>
-                        <div class="carousel-dots">
-                            <button class="carousel-dot active"></button>
-                            <button class="carousel-dot"></button>
                         </div>
                     </div>
 
@@ -942,9 +1102,6 @@
                         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
                             <a href="demos/clockwork-demo.html" target="_blank" class="clockwork-nav-btn" style="background: var(--primary); color: white; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);">
                                 ⚙️ Open Full Demo
-                            </a>
-                            <a href="demos/connect-fitness-demo.html" target="_blank" class="clockwork-nav-btn" style="background: #10b981; color: white; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
-                                💪 Fitness Variation
                             </a>
                             <a href="https://theclockworkhub.com" target="_blank" class="clockwork-nav-btn" style="background: #10b981; color: white; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
                                 🚀 Live Production Site
@@ -1098,11 +1255,8 @@
                 <h3>The Gift of Food</h3>
                 <p>Transform your health by harnessing the power of nutrition and well-being. A comprehensive guide to understanding how food impacts every aspect of life.</p>
                 <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
-                    <button onclick="openPurchaseModal('gift-of-food')" class="btn btn-primary" style="cursor: pointer; border: none; font-family: inherit; font-size: inherit;">
-                        💳 Buy Now
-                    </button>
                     <a href="https://www.amazon.com/Gift-Food-Transform-Harnessing-Well-being-ebook/dp/B0CM8YRDCX" class="btn" style="background: linear-gradient(135deg, #FF9900 0%, #FF7700 100%);" target="_blank">
-                        📦 Amazon
+                        📦 Buy on Amazon - $2.99
                     </a>
                 </div>
             </div>
@@ -1112,11 +1266,8 @@
                 <h3>Cracking Open Nature's Medicine Cabinet</h3>
                 <p>Discover the healing power of natural remedies and time-tested approaches to health and wellness from nature's pharmacy.</p>
                 <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
-                    <button onclick="openPurchaseModal('medicine-cabinet')" class="btn btn-primary" style="cursor: pointer; border: none; font-family: inherit; font-size: inherit;">
-                        💳 Buy Now
-                    </button>
                     <a href="https://www.amazon.com/Cracking-Open-Natures-Medicine-Cabinet-ebook/dp/B0CLKYDDL5" class="btn" style="background: linear-gradient(135deg, #FF9900 0%, #FF7700 100%);" target="_blank">
-                        📦 Amazon
+                        📦 Buy on Amazon - $5.99
                     </a>
                 </div>
             </div>
@@ -1195,13 +1346,19 @@
         <p class="section-subtitle">Let's build something amazing together</p>
         
         <div class="contact-content">
-            <p style="font-size: 1.2rem; margin-bottom: 2rem;">I'm always interested in hearing about new projects, collaboration opportunities, or just connecting with fellow developers and entrepreneurs.</p>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #66d9ff;">I'm always interested in hearing about new projects, collaboration opportunities, or just connecting with fellow developers and entrepreneurs.</p>
             
             <div class="contact-links">
+                <a href="mailto:Admin@clockwork.fit" class="contact-link">
+                    <span>📧 Admin@clockwork.fit</span>
+                </a>
+                <a href="tel:9413156906" class="contact-link">
+                    <span>📞 (941) 315-6906</span>
+                </a>
                 <a href="https://github.com/PheonixOfTesla" class="contact-link" target="_blank">
                     <span>GitHub</span>
                 </a>
-                <a href="https://www.linkedin.com/in/josh-lerner" class="contact-link" target="_blank">
+                <a href="https://www.linkedin.com/in/josh-lerner-210b29160/" class="contact-link" target="_blank">
                     <span>LinkedIn</span>
                 </a>
                 <a href="https://www.instagram.com/jcmb2.0" class="contact-link" target="_blank">
@@ -1217,7 +1374,7 @@
     <!-- Footer -->
     <footer>
         <p>&copy; 2025 Jay C. Built with passion in Sarasota, Florida.</p>
-        <p style="margin-top: 0.5rem; opacity: 0.7;">Full-Stack Software Engineer | AI Innovator | Published Author</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">Full-Stack Software Engineer | Innovator | Published Author</p>
     </footer>
 
     <script>
